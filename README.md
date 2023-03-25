@@ -73,4 +73,4 @@ that's all
 IMPORTANT !!!
 Remember that Softhddevice-drm NEEDS no running X
 
-typing sudo ./vdrrun you can chech if syste is ok
+typing sudo ./vdrrun you can chech if system is ok
