@@ -11,7 +11,7 @@ and configure through Raspi-config (sudo raspi-config)
 1 - System Options - Set Wireless LAN (optional) - Set Boot on Console autologin)
 3 - Interface Options (optional but I suggest enable SSH for check and work from remote)
 4 - 
-5 - Localisation Options (Set 1,2 & 4  item - for the language L1 use yourlanguage-UTF8)
+5 - Localisation Options (Set 1,2 & 4  item - for the language L1 use your language-UTF8)
 At the end reboot the system
 
 Now we install the script
@@ -23,18 +23,15 @@ or copy/paste in this folder the script vdr_installer_2.6.4_rpi via Usb or SSH (
 
 chmod u+rwx vdr_installer_2.6.4_rpi
 
-now we open the file
+now to open the file
 
 sudo ./vdr_installer_2.6.4_rpi
 Follow the script  ...
-Trick: at point 1 type 'First install libraries' just only now
-Follow the script  ...
 Point 1 creates a new folder downloading progs & libraries needed by Vdr 
-Point 2 install some DVB firmware FFMPEG e Eventlircd
+Point 2 install some DVB firmware FFMPEG and Eventlircd
 Point 3 install Vdr
 Point 4 install Vdr  Basic plugins (Softhddevice-drm - Skinflatplus - Iptv - Radio - Dvbapi)
 Point 5 configure all the Vdr system (remember when requested type b) Console)
-
 
 Tips & Tricks
 
@@ -66,7 +63,7 @@ dtoverlay=hifiberry-dac
 
 b) Raspberry Pi OS Desktop
 
-At first install Raspberry Pi Desktop version (& update it) remembrer apt updare & apy full-upgrade
+At first install Raspberry Pi Desktop version (& update it) remembrer apt updare & apt full-upgrade
 
 Same as above up to point five of the script
 
@@ -75,5 +72,5 @@ that's all
 
 IMPORTANT !!!
 Remember that Softhddevice-drm NEEDS no running X
-so change in console Ctrl + Alt + F1
-and type sudo ./vdrrun
+
+typing sudo ./vdrrun you can chech if syste is ok
