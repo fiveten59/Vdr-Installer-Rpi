@@ -14,8 +14,9 @@ and configure through Raspi-config (sudo raspi-config)
 5 - Localisation Options (Set 1,2 & 4  item - for the language L1 use your language-UTF8)
 At the end reboot the system
 
-Now we install the script
 sudo apt install tar git wget
+
+Now we install the script
 
 Create a new folder in your Home (mkdir -p 'a name of your choice')
 cd new folder
