@@ -15,7 +15,8 @@ and configure through Raspi-config (sudo raspi-config)
 At the end reboot the system
 
 Now we install the script
-# sudo apt install tar git wget
+sudo apt install tar git wget
+
 Create a new folder in your Home (mkdir -p 'a name of your choice')
 cd new folder
 download the file "https://www.dropbox.com/s/4ls1exbn24bs88f/vdr_installer_2.6.4_rpi"
