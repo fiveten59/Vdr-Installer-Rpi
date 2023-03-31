@@ -3,7 +3,7 @@
 #                                                                                       #
 # Script name: vdr_installer_2.6.4_rpi4                                                  #
 # Version: Git Repository Master (https://github.com/fiveten59/Vdr_installer)           #
-# Tested on Raspberry Pi4 - Os: Bullseye lite & Desktop                          #
+# Tested on Raspberry Pi4 - Os: Bullseye lite & Desktop 32/64 bit                      #
 # chmod the script                                                                      #
 # then load it simply typing: sudo ./vdr_installer_2.6.4_rpi4                            #
 #                                                                                       #
@@ -171,8 +171,8 @@ S30.0W 99999 H 10600  t V W15 [E0 10 38 F3] W15 A W15 T
 #
 "
 #
-apt-get -y install dialog git subversion wget rpd-plym-splash
-apt-get -y install checkinstall build-essential autoconf 
+apt-get -y install dialog git subversion wget rpd-plym-splash dialog
+apt-get -y install checkinstall build-essential autoconf unzip
 apt-get -y install autopoint automake cmake libtool
 
 mkdir $SRC/packages
@@ -199,7 +199,8 @@ dialog --title " VDR 2.6.4 Installer " --infobox "Copyright (C) 2023
 
     Script name: vdr_installer_2.6.4_rpi4
     Version: 2.6.4
-    Tested on Raspberry Pi4 - Os: Bullseye Lite & Desktop version
+    Tested on Raspberry Pi4
+    Os: Bullseye Lite & Desktop version 32/64 bit
     chmod the script
     then load it simply typing: sudo ./vdr_installer_2.6.4_rpi4 " 0 0
 
@@ -418,13 +419,6 @@ else
     wget https://www.dropbox.com/s/4mw9329v90e0joe/oscam.tar.gz
   fi
 
-if [ -e /home/`logname`/Vdrrepo/oscam_rpi_pcsc.tar.gz ]; then
-  echo " ..... File exists ..... "
-else
-  echo "File not found ... Downloading it now ....."
-    wget https://www.dropbox.com/s/tjdzk2yunjodf9c/oscam_rpi_pcsc.tar.gz
-  fi
-
 chmod -R 777 *;;
 
 #############################################################
@@ -464,7 +458,6 @@ echo "                    Downloading others "
 wget https://www.dropbox.com/s/6hzpdx9yv5ypzxv/traduzioni.tar.gz
 wget https://www.dropbox.com/s/yiqugxzvcdpvrij/icone.tar.gz
 wget https://www.dropbox.com/s/4mw9329v90e0joe/oscam.tar.gz
-wget https://www.dropbox.com/s/tjdzk2yunjodf9c/oscam_rpi_pcsc.tar.gz
 git clone https://github.com/fiveten59/Logos.git logos
 #
 chmod -R 777 *;;
@@ -525,13 +518,23 @@ apt-get -y install libavformat-dev libswresample-dev libswscale-dev libudev-dev
 apt-get -y install libxcb-dpms0-dev libxcb-glx0-dev libxcb-randr0-dev libxcb-screensaver0-dev
 apt-get -y install libxcb-xv0-dev libxcb-image0-dev libxcb-util0-dev libxcb-icccm4-dev libxcb-keysyms1-dev
 cd /usr/local/src/ffmpeg_sources
-echo "                    Wait for a few seconds ... take a good coffee"
-sleep 3
+sleep 1
 cp -rf /home/`logname`/Vdrrepo/main.zip /usr/local/src/ffmpeg_sources/
 unzip main.zip
 mv -f rpi-ffmpeg-test-4.3.5-main rpi-ffmpeg
 cd rpi-ffmpeg
-./configure --extra-libs="-ldl" --arch=armhf --enable-sand --enable-v4l2_m2m --enable-v4l2-request --enable-libudev --enable-libdrm --enable-libx265 --disable-rpi --enable-gpl --enable-pic --enable-avfilter --enable-nonfree --enable-gpl --enable-iconv --enable-network --enable-pthreads --disable-vdpau --disable-vaapi --enable-version3
+clear
+dmesg | grep -i arm64 > $TEMP/release_check
+if cat $TEMP/release_check | grep "arm64"; 
+then echo "64 bit system detected"
+echo "                    Wait for a few seconds ... take a good coffee"
+./configure --extra-libs="-ldl" --arch=arm64 --enable-sand --enable-v4l2_m2m --enable-v4l2-request --enable-libudev --enable-libdrm --enable-libx265 --disable-rpi --enable-gpl --enable-pic --enable-avfilter --enable-nonfree --enable-gpl --enable-iconv --enable-network --enable-pthreads --disable-vdpau --disable-vaapi --enable-version3 --enable-shared
+else echo "32 bit system detected"
+echo "                    Wait for a few seconds ... take a good coffee"
+./configure --extra-libs="-ldl" --arch=armhf --enable-sand --enable-v4l2_m2m --enable-v4l2-request --enable-libudev --enable-libdrm --enable-libx265 --disable-rpi --enable-gpl --enable-pic --enable-avfilter --enable-nonfree --enable-gpl --enable-iconv --enable-network --enable-pthreads --disable-vdpau --disable-vaapi --enable-version3 --enable-shared
+fi
+rm -rf $TEMP/release_check     
+ ###
     echo "                    Press Enter to continue ...               "
     read enterKey
 make -j10
@@ -1111,7 +1114,10 @@ esac
 sleep 1
 clear
 echo "                    *** Setup remote  ***"
-cd /etc/vdr; wget https://www.dropbox.com/s/twximoeme4uwu8f/eventlircd-remote.conf.tar.gz; tar -zxvf eventlircd-remote.conf.tar.gz; mv -f /etc/vdr/eventlircd-remote.conf.tar.gz /home/`logname`/Vdrrepo/
+cd /etc/vdr
+wget https://www.dropbox.com/s/twximoeme4uwu8f/eventlircd-remote.conf.tar.gz
+tar -zxvf eventlircd-remote.conf.tar.gz
+mv -f /etc/vdr/eventlircd-remote.conf.tar.gz /home/`logname`/Vdrrepo/
 #
 echo "                    *** Oscam Setup  ***"
 sleep 2
@@ -1125,10 +1131,23 @@ cd $ETC
 cp -rf /home/`logname`/Vdrrepo/oscam.tar.gz /$ETC/
 tar -zxvf oscam.tar.gz
 rm -rf oscam.tar.gz
-cp -rf /home/`logname`/Vdrrepo/oscam_rpi_pcsc.tar.gz /usr/local/bin/
+#
+dmesg | grep -i arm64 > $TEMP/release_check
+if cat $TEMP/release_check | grep "arm64"; 
+then echo "64 bit system detected"
+sleep 1
 cd /usr/local/bin
+wget https://www.dropbox.com/s/6rodipf5hy02laz/oscam_rpi_pcsc_64.tar.gz
+tar -zxvf oscam_rpi_pcsc_64.tar.gz
+rm -rf oscam_rpi_pcsc_64.tar.gz
+else echo "32 bit system detected"
+sleep 1
+cd /usr/local/bin
+wget https://www.dropbox.com/s/tjdzk2yunjodf9c/oscam_rpi_pcsc.tar.gz
 tar -zxvf oscam_rpi_pcsc.tar.gz
 rm -rf oscam_rpi_pcsc.tar.gz
+fi
+rm -rf $TEMP/release_check
 chmod 777 oscam
 fi
 #
