@@ -1,4 +1,4 @@
-Simple script for installing Vdr on Raspberry Pi4 & Pi3
+# Simple script for installing Vdr on Raspberry Pi4 & Pi3
 
 Os: 
 Bullseye Lite 32 bit for Rpi3
@@ -63,13 +63,12 @@ then a) Rpi4 Desktop (Bullseye Desktop version 32/64 bit)
 
 Vdr automatically starts on all the three version after booting 
 and (console version) shutdown after poweroff of your remote
-while on desktop version shut Vdr e display the usual Bullseye screeb  
+while on desktop version shut Vdr e display the usual Bullseye screen  
 
-Tips & Tricks
+# Tips & Tricks
 
-# Using a simple USB Audio Device [f.e. USB PnP Sound Device] from a remote terminal check
-aplay -l
-and control where is your Usb - In my case I have
+Using a simple USB Audio Device [f.e. USB PnP Sound Device] from a remote terminal check
+aplay -l and control where is your Usb - In my case I have
 "card 1: Device [USB PnP Sound Device], device 0: USB Audio [USB Audio]"
 so we have to change alsa.conf with
 sudo nano /usr/share/alsa/alsa.conf
@@ -80,10 +79,9 @@ with
 defaults.ctl.card 1
 defaults.pcm.card 1
 
-# Using a solid sound device like hifiberry or similar add to 
+Using a solid sound device like hifiberry or similar add to 
 sudo nano /boot/config.txt
 dtoverlay=hifiberry-dac 
 
-#
 - The "dark" is in /usr/local/etc
 - You can put your channells as usual in /etc/vdr
