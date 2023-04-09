@@ -23,7 +23,7 @@ Now we install the script
 
 cd new folder
 download the file
-wget https://www.dropbox.com/s/4ls1exbn24bs88f/vdr_installer_2.6.4_rpi
+wget https://www.dropbox.com/s/ukepxg7o75w1g39/vdr_installer_2.6.4_rpi
 or copy/paste in this folder the script vdr_installer_2.6.4_rpi via Usb or SSH (ifconfig gives your IP address) or via Lan using Filezilla
 
 chmod 755 vdr_installer_2.6.4_rpi
