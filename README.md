@@ -11,10 +11,10 @@ https://downloads.raspberrypi.org/raspios_lite_armhf/images/raspios_lite_armhf-2
 
 After installation update the system (sudo apt update && sudo apt full-upgrade)
 and configure through Raspi-config (sudo raspi-config)
-1 - System Options - Set Wireless LAN (optional) - Set Boot on Console autologin)
-3 - Interface Options (optional but I suggest enable SSH for check and work from remote)
-4 - 
-5 - Localisation Options (Set 1,2 & 4  item - for the language L1 use yourlanguage-UTF8)
+- System Options - Set Wireless LAN (optional) - Set Boot on Console autologin)
+- Interface Options (optional but I suggest enable SSH for check and work from remote)
+- 
+- Localisation Options (Set 1,2 & 4  item - for the language L1 use yourlanguage-UTF8)
 At the end reboot the system
 
 Create a new folder in your Home (mkdir -p 'a name of your choice' f.e "myvdr")
