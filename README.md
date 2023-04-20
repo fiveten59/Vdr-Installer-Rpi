@@ -40,7 +40,6 @@ Trick: at point 1 type 'First install libraries' just only now
  3 install Vdr
  4 install Vdr  Basic plugins (Rpihddevice(for rpi3)/Softhddevice-drm(for Rpi4) - Text2Skin-NarrowHd - Iptv - Radio - Dvbapi)
 On Raspberry Pi3 choice Rpihddevice!!!!
-
  5 configure all the Vdr system (remember when requested type b) Console)
 Select a) installing shared parts 
 Select c) installing Vdr on console On Raspberry Pi3
