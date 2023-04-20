@@ -35,15 +35,17 @@ sudo su
 And follow the script  ...
 Trick: at point 1 type 'First install libraries' just only now
 
-Point 1 creates a new folder downloading progs & libraries needed by Vdr 
-Point 2 install some DVB firmware FFMPEG e Eventlircd
-Point 3 install Vdr
-Point 4 install Vdr  Basic plugins (Rpihddevice(for rpi3)/Softhddevice-drm(for Rpi4) - Text2Skin-NarrowHd - Iptv - Radio - Dvbapi)
+ 1 creates a new folder downloading progs & libraries needed by Vdr 
+ 2 install some DVB firmware FFMPEG e Eventlircd
+ 3 install Vdr
+ 4 install Vdr  Basic plugins (Rpihddevice(for rpi3)/Softhddevice-drm(for Rpi4) - Text2Skin-NarrowHd - Iptv - Radio - Dvbapi)
 On Raspberry Pi3 choice Rpihddevice!!!!
 
-Point 5 configure all the Vdr system (remember when requested type b) Console)
+ 5 configure all the Vdr system (remember when requested type b) Console)
 Select a) installing shared parts 
 Select c) installing Vdr on console On Raspberry Pi3
+
+Reboot
 
 b) Raspberry Pi4 OS Lite (32 or 64 bit)
 
