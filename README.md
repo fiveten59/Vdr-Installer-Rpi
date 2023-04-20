@@ -85,4 +85,3 @@ dtoverlay=hifiberry-dac
 
 - The "dark" is in /usr/local/etc
 - You can put your channells as usual in /etc/vdr
-
