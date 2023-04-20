@@ -38,7 +38,7 @@ Trick: at point 1 type 'First install libraries' just only now
 Point 1 creates a new folder downloading progs & libraries needed by Vdr 
 Point 2 install some DVB firmware FFMPEG e Eventlircd
 Point 3 install Vdr
-Point 4 install Vdr  Basic plugins (Rpihddevice(for rpi3)/Softhddevice-drm(for Rpi4) - Skinflatplus - Iptv - Radio - Dvbapi)
+Point 4 install Vdr  Basic plugins (Rpihddevice(for rpi3)/Softhddevice-drm(for Rpi4) - Text2Skin-NarrowHd - Iptv - Radio - Dvbapi)
 On Raspberry Pi3 choice Rpihddevice!!!!
 
 Point 5 configure all the Vdr system (remember when requested type b) Console)
@@ -85,3 +85,4 @@ dtoverlay=hifiberry-dac
 
 - The "dark" is in /usr/local/etc
 - You can put your channells as usual in /etc/vdr
+
