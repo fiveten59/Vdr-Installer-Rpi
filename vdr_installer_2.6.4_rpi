@@ -275,6 +275,7 @@ case $yourch in
 a) clear
 
 echo " Downloading libs & progs for Vdr"
+sleep 2
 
 if [ -s /home/`logname`/Vdrrepo/driver_dvb.tar.gz ]; then
   echo " ..... File exists ..... "
@@ -298,6 +299,7 @@ else
 fi
 
 echo " Downloading Vdr and Plugins on local repo "
+sleep 2
 
 if [ -e /home/`logname`/Vdrrepo/vdr-2.6.4 ]; then
   echo " ..... File exists ..... "
@@ -363,14 +365,13 @@ else
 fi
 #
 echo " Downloading skins "
+sleep 2
 
-if [ -e /home/`logname`/Vdrrepo/skinlcarsng-develop.tar.gz ]; then
-#if [ -e /home/`logname`/Vdrrepo/skinlcarsng ]; then
+if [ -e /home/`logname`/Vdrrepo/skinlcarsng ]; then
   echo " ..... File exists ..... "
 else
   echo "File not found ... Downloading it now ....."
-     wget https://gitlab.com/kamel5/skinlcarsng/-/archive/develop/skinlcarsng-develop.tar.gz
-#     git clone https://gitlab.com/kamel5/skinlcarsng.git
+     git clone https://gitlab.com/kamel5/skinlcarsng.git
   fi
 
 if [ -e /home/`logname`/Vdrrepo/logos ]; then
@@ -395,6 +396,7 @@ else
   fi
 
 echo " Downloading others "
+sleep 2
 
 if [ -e /home/`logname`/Vdrrepo/traduzioni.tar.gz ]; then
   echo " ..... File exists ..... "
@@ -439,8 +441,7 @@ git clone https://github.com/ua0lnj/vdr-plugin-dvbapi.git
 
 echo "                    Downloading skins "
 
-#git clone https://gitlab.com/kamel5/skinlcarsng.git
-wget https://gitlab.com/kamel5/skinlcarsng/-/archive/develop/skinlcarsng-develop.tar.gz
+git clone https://gitlab.com/kamel5/skinlcarsng.git
 wget https://www.dropbox.com/s/806odyj5vyco3dg/lcars_pack.tar.gz
 
 echo "                    Downloading others "
@@ -715,16 +716,12 @@ echo " *** Patching avcdescriptor ***"
 patch -p1 < vdr_avcdescriptor.patch
 echo " *** config ***"
 patch -p1 < vdr_config.patch
-echo " *** Patching dvb_power_saving_feature ***"
+echo " *** Patching dvb power saving feature ***"
 patch -p1 < vdr_dvb_power_saving_feature.patch
-echo " *** Patching ClearObsoleteChannels ***"
-patch -p1 < vdr_HelmutB_ClearObsoleteChannels.patch
-#echo " *** mainmenuhooks ***"
-#patch -p1 < vdr_mainmenuhook.patch
-echo " *** Patching vdr_maxdevice ***"
+echo " *** Patching maxdevice ***"
 patch -p1 < vdr_maxdevice.patch
-#echo " *** Patching vdr_menuorg ***"
-#    patch -p1 < vdr_menuorg.patch
+echo " *** Patching vdr_menuorg ***"
+    patch -p1 < vdr_menuorg.patch
 echo " *** Patching menuselection ***"
 patch -p1 < vdr_menuselection.patch
 echo " *** Patching svdrphosts ***"
@@ -735,8 +732,6 @@ echo " *** Patching wareagleicon ***"
 patch -p1 < vdr_wareagleicon.patch
 echo " *** Patching zapcockpit ***"
 patch -p1 < vdr_zapcockpit.patch
-echo " *** Patching skinlcarsng ***"
-patch -p1 < numrecordingsinpath.patch
 #
 make && make plugins
 clear
@@ -867,10 +862,7 @@ esac
 echo "               *** Skinlcarsng ***"
 sleep 2
 cd $VDRSRC
-cp -rf /home/`logname`/Vdrrepo/skinlcarsng-develop.tar.gz /$VDRSRC
-#cp -rf /home/`logname`/Vdrrepo/skinlcarsng /$VDRSRC
-tar -zxvf skinlcarsng-develop.tar.gz
-mv skinlcarsng-develop skinlcarsng
+cp -rf /home/`logname`/Vdrrepo/skinlcarsng /$VDRSRC
 cd skinlcarsng
 make && make install
 cd /etc/vdr/themes
@@ -919,7 +911,6 @@ echo "                    Removing VDR-2.6.4 plugins"
 cd $VDRSRC
 rm -rf softhddevice-drm
 rm -rf rpihddevice
-rm -rf skinflatplus
 rm -rf skinlcarsng
 rm -rf iptv
 rm -rf radio
@@ -927,7 +918,6 @@ rm -rf dvbapi
 cd $LIB
 rm -rf libvdr-softhddevice-drm.*
 rm -rf libvdr-rpihddevice.*
-rm -rf libvdr-skinflatplus.*
 rm -rf libvdr-skinlcarsng.*
 rm -rf libvdr-iptv.*
 rm -rf libvdr-radio.*
