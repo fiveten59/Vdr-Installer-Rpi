@@ -452,8 +452,8 @@ else
 apt-get -y install gawk libudev-dev evtest lirc ir-keytable
 cd $SRC
 cp -rf $REPO/eventlircd $SRC
-cp -rf $REPO/eventlircd_patch.tar.gz $SRC/eventlircd
 cd eventlircd
+cp -rf $REPO/eventlircd_patch.tar.gz $SRC/eventlircd
 tar -zxvf eventlircd_patch.tar.gz
 rm -rf eventlircd_patch.tar.gz
 patch -p1 < eventlircd_makefile.patch
@@ -560,7 +560,7 @@ sleep 2
 if [ -f $SRC/driver_dvb/check ]
 then echo " Sat firmwares are already installed"; sleep 2
 else
-cp -rf /home/'logname'/Vdr_repo/driver_dvb.tar.gz $SRC
+cp -rf $REPO/driver_dvb.tar.gz $SRC
 cd $SRC
 tar -zxvf driver_dvb.tar.gz
 rm -rf driver_dvb.tar.gz
@@ -878,7 +878,7 @@ clear
 echo "                    Installing Icons"
 sleep 2
 if [ -f $SRC/icone/vdr.jpg ]
-then echo " Icons $Remind4"
+then echo "Icons $Remind4"
 sleep 2
 else cd $SRC
 cp -rf $REPO/icone.tar.gz $SRC
@@ -888,7 +888,7 @@ echo "Icons installed"
 sleep 2
 fi
 #
-echo " Installing Italian translation for some plugins "
+echo "                    Installing Italian translation for some plugins"
 cd $SRC
 mkdir -p traduzioni
 cd traduzioni
@@ -898,7 +898,7 @@ rm -rf traduzioni.tar.gz
 echo "Italian translation installed"
 sleep 2
 #
-echo "*** keymacros.conf setup ***"
+echo "                    keymacros.conf setup "
 rm -rf /etc/vdr/keymacros.conf
 touch /etc/vdr/keymacros.conf
 echo "# Remote control key macros for VDR
@@ -932,7 +932,7 @@ echo "True Type fonts installed"
 sleep 2
 fi
 #
-echo "                    *** Create Vdr Start & Stop***"
+echo "                    Create Vdr Start & Stop"
 sleep 2
 rm -rf /etc/init.d/vdr
 touch /etc/init.d/vdr
@@ -1004,7 +1004,7 @@ chmod 777 /usr/local/bin/KillVdr.sh
 echo "Vdr Start & Stop installed"
 sleep 2
 #
-echo "                    *** Install default Skin for Vdr  ***"
+echo "                    Install default Skin for Vdr"
 sleep 2
 if [ -f /etc/vdr/themes/checklcars ]
 then echo " Default Skin is already installed"
@@ -1013,21 +1013,21 @@ cd /etc/vdr/themes
 tar -zxvf lcars_pack.tar.gz
 cd /etc/vdr/themes
 rm -rf lcars_pack.tar.gz
-echo "Default Skin installed"
+echo "                    Default Skin installed"
 sleep 2
 fi
 #
-echo "                    *** Install Channels logos  ***"
+echo "                    Install Channels logos"
 sleep 2
 if [ -f /etc/vdr/logos/2be.png ]
-then echo " Logos are already installed"
+then echo "                    Logos are already installed"
 else
 cp -rf $REPO/logos /etc/vdr/
 fi
-echo "Channels logos installed"
+echo "                    Channels logos installed"
 sleep 2
 #
-echo "                    *** Diseqc setup  ***"
+echo "                    Diseqc setup"
 sleep 2
 rm -rf /etc/vdr/diseqc.conf
 rm -rf /etc/vdr/channels.conf
@@ -1061,10 +1061,10 @@ case $yourch in
 a) clear
 echo "$TRIAL" >> /etc/vdr/diseqc.conf
 cd /etc/vdr/
-cp -rf $REPO4/channels.conf.trial.tar.gz /etc/vdr/
+cp -rf $REPO/channels.conf.trial.tar.gz /etc/vdr/
 tar -zxvf channels.conf.trial.tar.gz
 rm -rf channels.conf.trial.tar.gz
-echo "Channell TRIAL list installed"
+echo "                    Channell TRIAL list installed"
 sleep 2;;
 #
 b) clear
@@ -1073,7 +1073,7 @@ cd /etc/vdr/
 cp -rf $REPO/channels.conf.dual.tar.gz /etc/vdr/
 tar -zxvf channels.conf.dual.tar.gz
 rm -rf channels.conf.dual.tar.gz
-echo "Channell DUAL list installed"
+echo "                    Channell DUAL list installed"
 sleep 2;;
 #
 # c);;
@@ -1084,7 +1084,7 @@ cd /etc/vdr/
 cp -rf $REPO/channels-w_scan2-Eutelsat_9.conf.tar.gz /etc/vdr/
 tar -zxvf channels-w_scan2-Eutelsat9.conf.tar.gz
 rm -rf channels-w_scan2-Eutelsat9.conf.tar.gz
-echo "Channell MONO9 list installed"
+echo "                    Channell MONO9 list installed"
 sleep 2;;
 #
 e) 
@@ -1094,7 +1094,7 @@ cd /etc/vdr/
 cp -rf $REPO/channels.conf.trial.tar.gz /etc/vdr/
 tar -zxvf channels.conf.trial.tar.gz
 rm -rf channels.conf.trial.tar.gz
-echo "Channell MONO13 list installed"
+echo "                    Channell MONO13 list installed"
 sleep 2;;
 #
 f) 
@@ -1104,7 +1104,7 @@ cd /etc/vdr/
 cp -rf $REPO/channels-w_scan2-Astra_19.conf.tar.gz /etc/vdr/
 tar -zxvf channels-w_scan2-Astra_19.conf.tar.gz
 rm -rf channels-w_scan2-Astra_19.conf.tar.gz
-echo "Channell MONO19 list installed"
+echo "                    Channell MONO19 list installed"
 sleep 2;;
 #
 g)
@@ -1114,7 +1114,7 @@ cd /etc/vdr/
 cp -rf $REPO/channels-w_scan2-Astra23.conf.tar.gz /etc/vdr/
 tar -zxvf channels-w_scan2-Astra23.conf.tar.gz
 rm -rf channels-w_scan2-Astra23.conf.tar.gz
-echo "Channell MONO23 list installed"
+echo "                    Channell MONO23 list installed"
 sleep 2;;
 #
 h)
@@ -1124,7 +1124,7 @@ cd /etc/vdr/
 wget https://channelpedia.yavdr.com/gen/DVB-S/S28.2E/S28.2E_complete_sorted_by_groups.channels.conf/S28.2E_complete_sorted_by_groups.channels.conf
 mv -f S28.2E_complete_sorted_by_groups.channels.conf Astra28_channels.conf
 cp -rf Astra28_channels.conf $REPO/
-echo "Channell MONO28 list installed"
+echo "                    Channell MONO28 list installed"
 sleep 2;;
 #
 i)
@@ -1134,7 +1134,7 @@ cd /etc/vdr/
 cp -rf $REPO/channels-w_scan2-Tursat.conf.tar.gz /etc/vdr/
 tar -zxvf channels-w_scan2-Turksat.conf.tar.gz
 rm -rf channels-w_scan2-Turksat.conf.tar.gz
-echo "Channell MONO42 list installed"
+echo "                    Channell MONO42 list installed"
 sleep 2;;
 #
 l) clear
@@ -1143,12 +1143,12 @@ cd /etc/vdr/
 cp -rf $REPO/channels-w_scan2-Thor.conf.tar.gz /etc/vdr/
 tar -zxvf channels-w_scan2-Thor.conf.tar.gz
 rm -rf channels-w_scan2-Thor.conf.tar.gz
-echo "Channell MONO08W list installed"
+echo "                    Channell MONO08W list installed"
 sleep 2;;
 #
 m)
 clear 
-echo "Not available"
+echo "                    Not available"
 #echo "$MONO5W" >> /etc/vdr/diseqc.conf
 #cd /etc/vdr/
 #wget 
@@ -1158,7 +1158,7 @@ echo "Not available"
 sleep 2;;
 n)
 clear
-echo "Not available"
+echo "                    Not available"
 #echo "$MONO30W" >> /etc/vdr/diseqc.conf
 #cd /etc/vdr/
 #cp -rf $REPO/channels-w_scan2-Eutelsat5.tar.gz
@@ -1169,7 +1169,7 @@ sleep 2;;
 #
 p)
 clear
-echo "$MONO13_CAMPER" >> /etc/vdr/diseqc.conf
+echo "                    MONO13_CAMPER" >> /etc/vdr/diseqc.conf
 cd /etc/vdr/
 cp -rf $REPO/channels.conf.camper.tar.gz /etc/vdr/
 tar -zxvf channels.conf.camper.tar.gz
@@ -1182,7 +1182,7 @@ esac
 #
 sleep 1
 clear
-echo "                    *** Setup remote  ***"
+echo "                    Setup remote"
 cp -rf $REPO/eventlircd-remote.conf.tar.gz /etc/vdr
 cd /etc/vdr
 tar -zxvf eventlircd-remote.conf.tar.gz
@@ -1191,12 +1191,12 @@ echo "Setup remote installed"
 sleep 2
 #
 
-echo "                    *** Oscam Setup  ***"
+echo "                    Oscam Setup"
 sleep 2
 cd /usr/local
 mkdir -p etc
 if [ -f $ETC/oscam.check ]
-  then  echo "Oscam conf is already installed"
+  then  echo "                    Oscam conf is already installed"
 else
 apt-get -y install libssl-dev libcrypto++-dev pcscd subversion libpcsclite-dev libusb-1.0-0-dev
 cp -rf $REPO/oscam.tar.gz /$ETC/
@@ -1206,19 +1206,19 @@ rm -rf oscam.tar.gz
 fi
 # questa parte sotto è in dubbio
 if [ -f /usr/local/bin/oscam ]
-  then  echo "Oscam is already installed"
+  then  echo "                    Oscam is already installed"
 else
 #dmesg | grep -i arm64 > $TEMP/release_check
 #if cat $TEMP/release_check | grep "arm64"
 getconf LONG_BIT > $TEMP/release_check
 if cat $TEMP/release_check | grep "64"
-then echo "64 bit system detected"
+then echo "                    64 bit system detected"
 sleep 1
-cp -rf $REPO/oscam_pcsc-64.tar.gz /usr/local/bin
+cp -rf $REPO/oscam_rpi_pcsc_64.tar.gz /usr/local/bin
 cd /usr/local/bin
-tar -zxvf oscam_pcsc-64.tar.gz
-rm -rf oscam_pcsc-64.tar.gz
-else echo "32 bit system detected"
+tar -zxvf oscam_rpi_pcsc_64.tar.gz
+rm -rf oscam_rpi_pcsc_64.tar.gz
+else echo "                    32 bit system detected"
 sleep 1
 cp -rf $REPO/oscam_pcsc-32.tar.gz /usr/local/bin
 cd /usr/local/bin
@@ -1227,11 +1227,11 @@ rm -rf oscam_pcsc-32.tar.gz
 fi
 rm -rf $TEMP/release_check
 chmod 777 oscam
-echo "Oscam installed"
+echo "                    Oscam installed"
 sleep 2
 fi
 #
-echo "                    *** Create Oscam start & stop command line ***"
+echo "                    Create Oscam start & stop command line"
 sleep 2
 rm -rf /etc/init.d/oscam
 touch /etc/init.d/oscam
@@ -1299,7 +1299,7 @@ sudo /etc/init.d/oscam stop > /dev/null 2>&1
 ' >> /usr/local/bin/KillOscam.sh
 chmod 777 /usr/local/bin/KillOscam.sh
 #
-echo "Oscam start & stop installed"
+echo "                    Oscam start & stop installed"
 sleep 2
 #
 cd $REPO/
@@ -1313,10 +1313,10 @@ cd /$PLUGINS/iptv/
 rm -rf vlc2iptv
 tar -zxvf iptv_conf.tar.gz
 rm -rf iptv_conf.tar.gz
-echo "Iptv configured"
+echo "                    Iptv configured"
 sleep 2
 #
-echo "             *** Permission to execute Eventlircd - Vdr - Oscam  ***"
+echo "                    Permission to execute Eventlircd - Vdr - Oscam"
 sleep 2
 #
 rm -rf /etc/sudoers.d/eventlircd
@@ -1331,10 +1331,10 @@ rm -rf /etc/sudoers.d/oscam
 touch /etc/sudoers.d/oscam
 echo "oscam ALL=(ALL) ALL" >> /etc/sudoers.d/oscam
 echo "%`logname` ALL=NOPASSWD: /etc/init.d/oscam" >> /etc/sudoers.d/oscam
-echo "Permissions created"
+echo "                    Permissions created"
 sleep 2
 #
-echo "                    *** Desktop Automatic start Eventlircd - Oscam  ***"
+echo "                    Desktop Automatic start Eventlircd - Oscam"
 sleep 2
 cd /etc/init.d
 update-rc.d oscam remove
@@ -1345,10 +1345,10 @@ update-rc.d eventlircd remove
 sleep 1
 update-rc.d eventlircd defaults
 sleep 1
-echo "Automatic start Eventlircd - Oscam created"
+echo "                    Automatic start Eventlircd - Oscam created"
 sleep 2
 #
-echo "               *** Installing Vdr-Plugin-Dvbapi ***"
+echo "                    Installing Vdr-Plugin-Dvbapi"
 sleep 2
 cd $VDRSRC
 apt-get -y install libssl-dev libdvbcsa-dev
@@ -1361,7 +1361,7 @@ make LIBDVBCSA=1
 make LIBDVBCSA=1 install
 cd $VDRSRC
 rm -rf dvbapi
-echo "Vdr-Plugin-Dvbapi installed"
+echo "                    Vdr-Plugin-Dvbapi installed"
 sleep 2
 ;;
 #
@@ -1381,18 +1381,18 @@ case $yourch in
 #
 a)
 clear
-echo " Create Vdr start & stop for Rpi4 Desktop using Softhddevice-drm"
+echo "                    Create Vdr start & stop for Rpi4 Desktop using Softhddevice-drm"
 sleep 2
 rm -rf /usr/local/bin/vdrrun
 touch /usr/local/bin/vdrrun
 #
 cd /etc/xdg/autostart
 rm -rf vdr-autostart.desktop
-cp -rf $REPO/vdr-autostart.desktop_rpi.tar.gz /etc/xdg/autostart
-tar -zxvf vdr-autostart.desktop_rpi.tar.gz
-rm -rf vdr-autostart.desktop_rpi.tar.gz
+#cp -rf $REPO/vdr-autostart.desktop_rpi.tar.gz /etc/xdg/autostart
+#tar -zxvf vdr-autostart.desktop_rpi.tar.gz
+#rm -rf vdr-autostart.desktop_rpi.tar.gz
 #
-echo "                    *** Create Vdr vdrpoweroff ***"
+echo "                    Create Vdr vdrpoweroff"
 sleep 2
 rm -rf /usr/local/bin/vdrpoweroff
 touch /usr/local/bin/vdrpoweroff
@@ -1420,9 +1420,9 @@ chmod 777 /usr/local/bin/vdrrun
 echo "Vdr start & stop created"
 sleep 2
 #
-echo "                    *** Setup icons for Rpi 4 Desktop ***"
+echo "                    Setup icons for Rpi 4 Desktop"
 sleep 2
-echo "                    *** Setup Vdr icons  ***"
+echo "                    Setup Vdr icons"
 sleep 2
 rm -rf /home/`logname`/Scrivania/Vdr.desktop
 rm -rf /usr/share/applications/Vdr.desktop
@@ -1439,7 +1439,7 @@ Exec=/usr/local/bin/start-vdr.sh
 " >> /usr/share/applications/Vdr.desktop
 chmod 777 /usr/share/applications/Vdr.desktop
 #
-echo "                    *** Setup Kill Vdr icon  ***"
+echo "                    Setup Kill Vdr icon"
 sleep 2
 rm -rf /home/`logname`/Scrivania/KillVdr.desktop
 rm -rf /usr/share/applications/KillVdr.desktop
@@ -1457,7 +1457,7 @@ Exec=/usr/local/bin/KillVdr.sh
 chmod 777 /usr/share/applications/KillVdr.desktop
 sleep 2
 #
-echo "                    *** Setup Oscam icon  ***"
+echo "                    Setup Oscam icon"
 sleep 2
 rm -rf /home/`logname`/Scrivania/Oscam.desktop
 rm -rf /usr/share/applications/Oscam.desktop
@@ -1473,7 +1473,7 @@ Exec=/usr/local/bin/start-oscam.sh
 " >> /usr/share/applications/Oscam.desktop
 chmod 777 /usr/share/applications/Oscam.desktop
 #
-echo "                    *** Setup Kill Oscam icon  ***"
+echo "                    Setup Kill Oscam icon"
 sleep 2
 rm -rf /home/`logname`/Scrivania/KillOscam.desktop
 rm -rf /usr/share/applications/KillOscam.desktop
@@ -1489,7 +1489,7 @@ Exec=/usr/local/bin/KillOscam.sh
 " >> /usr/share/applications/KillOscam.desktop
 chmod 777 /usr/share/applications/KillOscam.desktop
 #
-echo "                    *** Setup icons for Rpi 4 Desktop installed***"
+echo "                    Setup icons for Rpi 4 Desktop installed"
 sleep 2
 #
 ln -s /usr/local/bin/vdrrun /home/`logname`/vdrrun
@@ -1502,7 +1502,7 @@ sleep 3;;
 #
 b)
 clear
-echo "Create Vdr start & stop for Rpi4 Console using Softhddevice-drm"
+echo "                    Create Vdr start & stop for Rpi4 Console using Softhddevice-drm"
 sleep 2
 rm -rf /usr/local/bin/vdrrun
 touch /usr/local/bin/vdrrun
@@ -1518,7 +1518,7 @@ echo '#!/bin/bash
 chmod 777 /usr/local/bin/vdrrun
 #
 clear
-echo "                    *** Create Vdr vdrpoweroff ***"
+echo "                    Create Vdr vdrpoweroff"
 sleep 2
 rm -rf /usr/local/bin/vdrpoweroff
 touch /usr/local/bin/vdrpoweroff
@@ -1529,7 +1529,7 @@ killall -9 vdr & killall -9 vlc & killall -9 oscam & shutdown -h now
 ' >> /usr/local/bin/vdrpoweroff
 chmod 777 /usr/local/bin/vdrpoweroff
 #
-echo "Vdr start & stop created for Rpi 4 Console"
+echo "                    Vdr start & stop created for Rpi 4 Console"
 sleep 2
 #
 sleep 2
@@ -1559,7 +1559,7 @@ esac;;
 #
 c)
 clear
-echo "Create Vdr Console start & stop command line for Rpi 3 using Rpihddevice"
+echo "                    Create Vdr Console start & stop command line for Rpi 3 using Rpihddevice"
 sleep 2
 rm -rf /usr/local/bin/vdrrun
 touch /usr/local/bin/vdrrun
@@ -1579,7 +1579,7 @@ sleep 1
 chmod 777 /usr/local/bin/vdrrun
 #
 #
-echo "                    *** Create Vdr vdrpoweroff ***"
+echo "                    Create Vdr vdrpoweroff"
 sleep 2
 rm -rf /usr/local/bin/vdrpoweroff
 touch /usr/local/bin/vdrpoweroff
@@ -1590,7 +1590,7 @@ killall -9 vdr & killall -9 vlc & killall -9 oscam
 ' >> /usr/local/bin/vdrpoweroff
 chmod 777 /usr/local/bin/vdrpoweroff
 #
-echo "                    *** Console Automatic start Vdr  ***"
+echo "                    Console Automatic start Vdr"
 sleep 2
 cd /etc
 rm -rf rc.local
@@ -1599,10 +1599,10 @@ tar -zxvf rpi_rc.local.tar.gz
 rm -rf rpi_rc.local.tar.gz
 chmod 777 rc.local
 #
-echo "Vdr start & stop created"
+echo "                    Vdr start & stop created"
 sleep 2
 #
-echo "                    *** Console Boot ***"
+echo "                    Console Boot"
 sleep 2
 
 sed -i 's|#dtoverlay=vc4-kms-v3d|dtoverlay=vc4-kms-v3d|' /boot/config.txt
