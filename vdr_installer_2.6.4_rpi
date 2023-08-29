@@ -11,15 +11,16 @@
 #########################################################################################
 #
 clear
+REPO="/home/`logname`/Vdr_repo"
 PLUGIN_DRM="--lirc -P'dvbapi' -P'softhddevice-drm' -P'skinlcarsng' -P'iptv' -P'radio -l /etc/vdr/plugins/radio/rtextUnten-kleo2.mpg'"
 PLUGIN_RPIHDDEVICE="--lirc -P'dvbapi' -P'rpihddevice -o 5' -P'skinlcarsng' -P'iptv' -P'radio -l /etc/vdr/plugins/radio/rtextUnten-kleo2.mpg'"
 ETC='/usr/local/etc'
 SRC='/usr/local/src'
-SRCVDR='/usr/local/src/vdr-2.6.4'
+SRCVDR='$SRC/vdr-2.6.4'
 VDRSRC=''$SRC'/vdr/PLUGINS/src'
 LIB='/usr/lib/vdr'
 VDR='vdr-2.6.4'
-PACKAGES="/usr/local/src/packages"
+PACKAGES="$SRC/packages"
 TEMP='/tmp'
 SHARE='/usr/share/vdr/plugins'
 PLUGINS='/etc/vdr/plugins'
@@ -177,26 +178,10 @@ S30.0W 99999 H 10600  t V W15 [E0 10 38 F3] W15 A W15 T
 apt-get -y install dialog git subversion wget rpd-plym-splash dialog
 apt-get -y install checkinstall build-essential autoconf unzip
 apt-get -y install autopoint automake cmake libtool
-
+#
+sudo useradd vdr -g video -d /home/vdr -s /bin/bash -m
 mkdir $SRC/packages
-dialog --title " VDR 2.6.4 Installer " --infobox "Copyright (C) 2023
-
-    This file is part of VDR Complete Installer (VCI).
-
-    VCI is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    VCI is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with VCI. see the file VCI_License.GPL, If not see
-    <http://www.gnu.org/licenses/>.
-
+dialog --title " VDR 2.6.4 Installer 4 Raspberry Pi 3&4" --infobox "
 
     A special thanks goes to Klaus Schmidinger Vdr Developer
 
@@ -252,18 +237,17 @@ echo -n "              Enter your menu choice = Submenu [1~5] -- Exit [6] :     
 read yourch
 case $yourch in
 #
-
 1)
 cd /home/`logname`
-mkdir -p Vdrrepo
-chmod -R 777 Vdrrepo
-cd Vdrrepo
+#mkdir -p Vdr_repo
+#chmod -R 777 Vdr_repo
+#cd Vdr_repo
 clear
 dialog --title "   ** Download & Upgrade Local Repository **   " --infobox "
    ---------------------------------------------------------------------------------------------
        Install ~ Upgrade ~ Remove ~ Local Repository
    ---------------------------------------------------------------------------------------------
-        [a]  Download libs & progs for Vdr
+        [a]  Download libs - progs & patch for Vdr
         [b]  Remove & Upgrade all
 
         [z]  Skip
@@ -271,27 +255,28 @@ dialog --title "   ** Download & Upgrade Local Repository **   " --infobox "
 echo -n "     Enter your menu choice = Install [a] ~~ Remove & Upgrade [b] ~~ Skip [z]      "
 read yourch
 case $yourch in
-
+#
 a) clear
-
-echo " Downloading libs & progs for Vdr"
+echo " Downloading libs - progs & patch for Vdr - Intel & Nvidia Video devices on local repo "
 sleep 2
 
-if [ -s /home/`logname`/Vdrrepo/driver_dvb.tar.gz ]; then
-  echo " ..... File exists ..... "
+if [ -d /home/`logname`/Vdr_repo ]; then
+  echo " ..... Folder exists ..... "
 else
-  echo "File not found ... Downloading it now ....."
-   wget https://www.dropbox.com/s/waolpom1x6nnktv/driver_dvb.tar.gz
-fi
+  echo "Folder not found ... Create & Downloading it now ....."
+    git clone https://github.com/fiveten59/Vdr_repo.git
+  fi
+  
+cd Vdr_repo 
 
-if [ -s /home/`logname`/Vdrrepo/eventlircd ]; then
+if [ -e $REPO/eventlircd ]; then
   echo " ..... File exists ..... "
 else
   echo "File not found ... Downloading it now ...."
    git clone https://github.com/OpenELEC/eventlircd.git
 fi
 
-if [ -s /home/`logname`/Vdrrepo/main.zip ]; then
+if [ -e $REPO/main.zip ]; then
   echo " ..... File exists ..... "
 else
   echo "File not found ... Downloading it now ....."
@@ -301,63 +286,28 @@ fi
 echo " Downloading Vdr and Plugins on local repo "
 sleep 2
 
-if [ -e /home/`logname`/Vdrrepo/vdr-2.6.4 ]; then
+if [ -e $REPO/vdr-2.6.4 ]; then
   echo " ..... File exists ..... "
 else
   echo "File not found ... Downloading it now ....."
     git clone --branch stable/2.6 git://git.tvdr.de/vdr.git vdr-2.6.4
   fi
 
-if [ -e /home/`logname`/Vdrrepo/vdr-patches.2.6.4.tar.gz ]; then
-  echo " ..... File exists ..... "
-else
-  echo "File not found ... Downloading it now ....."
-    wget https://www.dropbox.com/s/mu9fx8udl94jy2p/vdr-patches.2.6.4.tar.gz
-  fi
-
-if [ -e /home/`logname`/Vdrrepo/Make.config.tar.gz ]; then
-  echo " ..... File exists ..... "
-else
-  echo "File not found ... Downloading it now ....."
-    wget https://www.dropbox.com/s/qds2k91od7oboed/Make.config.tar.gz
-  fi
-
-if [ -e /home/`logname`/Vdrrepo/vdr-plugin-iptv ]; then
+if [ -e $REPO/vdr-plugin-iptv ]; then
   echo " ..... File exists ..... "
 else
   echo "File not found ... Downloading it now ....."
     git clone https://github.com/rofafor/vdr-plugin-iptv.git
   fi
 
-if [ -e /home/`logname`/Vdrrepo/patch_iptv.tar.gz ]; then
-  echo " ..... File exists ..... "
-else
-  echo "File not found ... Downloading it now ....."
-    wget https://www.dropbox.com/s/nof5ydmxrplw2b0/patch_iptv.tar.gz
-fi
-
-if [ -e /home/`logname`/Vdrrepo/iptv_conf.tar.gz ]; then
-  echo " ..... File exists ..... "
-else
-  echo "File not found ... Downloading it now ....."
-    wget https://www.dropbox.com/s/vmhkf4rzhoh4wa5/iptv_conf.tar.gz
-fi
-
-if [ -e /home/`logname`/Vdrrepo/vdr-plugin-radio ]; then
+if [ -e $REPO/vdr-plugin-radio ]; then
   echo " ..... File exists ..... "
 else
   echo "File not found ... Downloading it now ....."
     git clone https://github.com/siricco/vdr-plugin-radio.git
 fi
 
-if [ -e /home/`logname`/Vdrrepo/radio_scripts.tar.gz ]; then
-  echo " ..... File exists ..... "
-else
-  echo "File not found ... Downloading it now ....."
-    wget https://www.dropbox.com/s/qlnarjlzfsh8vvl/radio_scripts.tar.gz
-fi
-
-if [ -e /home/`logname`/Vdrrepo/vdr-plugin-dvbapi ]; then
+if [ -e $REPO/vdr-plugin-dvbapi ]; then
   echo " ..... File exists ..... "
 else
   echo "File not found ... Downloading it now ....."
@@ -367,91 +317,58 @@ fi
 echo " Downloading skins "
 sleep 2
 
-if [ -e /home/`logname`/Vdrrepo/skinlcarsng ]; then
+if [ -e $REPO/skinlcarsng ]; then
   echo " ..... File exists ..... "
 else
   echo "File not found ... Downloading it now ....."
-     git clone https://gitlab.com/kamel5/skinlcarsng.git
-  fi
-
-if [ -e /home/`logname`/Vdrrepo/logos ]; then
-  echo " ..... File exists ..... "
-else
-  echo "File not found ... Downloading it now ....."
-    git clone https://github.com/fiveten59/Logos.git logos
-  fi
-
-if [ -e /home/`logname`/Vdrrepo/icone.tar.gz ]; then
-  echo " ..... File exists ..... "
-else
-  echo "File not found ... Downloading it now ....."
-    wget https://www.dropbox.com/s/yiqugxzvcdpvrij/icone.tar.gz
-  fi
-
-if [ -e /home/`logname`/Vdrrepo/lcars_pack.tar.gz ]; then
-  echo " ..... File exists ..... "
-else
-  echo "File not found ... Downloading it now ....."
-    wget https://www.dropbox.com/s/806odyj5vyco3dg/lcars_pack.tar.gz
+    git clone https://gitlab.com/kamel5/skinlcarsng.git
   fi
 
 echo " Downloading others "
 sleep 2
 
-if [ -e /home/`logname`/Vdrrepo/traduzioni.tar.gz ]; then
+if [ -e $REPO/logos ]; then
   echo " ..... File exists ..... "
 else
   echo "File not found ... Downloading it now ....."
-    wget https://www.dropbox.com/s/6hzpdx9yv5ypzxv/traduzioni.tar.gz
+    git clone https://github.com/fiveten59/Logos.git logos
   fi
-
-if [ -e /home/`logname`/Vdrrepo/oscam.tar.gz ]; then
-  echo " ..... File exists ..... "
-else
-  echo "File not found ... Downloading it now ....."
-    wget https://www.dropbox.com/s/4mw9329v90e0joe/oscam.tar.gz
-  fi
-
-chmod -R 777 *;;
+#
+cd ..
+chmod -R 777 Vdr_repo;;
 
 #############################################################
 
 b)
 clear
-cd /home/`logname`/Vdrrepo
-rm -rf *
+cd /home/`logname`/
+rm -rf Vdr_repo
+git clone https://github.com/fiveten59/Vdr_repo.git
+cd Vdr_repo
 
 echo "                    Downloading Libraries "
 
-wget https://www.dropbox.com/s/waolpom1x6nnktv/driver_dvb.tar.gz
 wget wget https://github.com/jc-kynesim/rpi-ffmpeg/archive/refs/heads/test/4.3.5/main.zip
 git clone https://github.com/OpenELEC/eventlircd.git
 
 echo "                    Downloading Vdr and Plugins on local repo "
 
 git clone --branch stable/2.6 git://git.tvdr.de/vdr.git vdr-2.6.4
-wget https://www.dropbox.com/s/mu9fx8udl94jy2p/vdr-patches.2.6.4.tar.gz
-wget https://www.dropbox.com/s/qds2k91od7oboed/Make.config.tar.gz
-git clone https://github.com/siricco/vdr-plugin-radio.git
-wget https://www.dropbox.com/s/qlnarjlzfsh8vvl/radio_scripts.tar.gz
-git clone https://github.com/rofafor/vdr-plugin-iptv.git
-wget https://www.dropbox.com/s/nof5ydmxrplw2b0/patch_iptv.tar.gz
-wget https://www.dropbox.com/s/vmhkf4rzhoh4wa5/iptv_conf.tar.gz
 git clone https://github.com/ua0lnj/vdr-plugin-dvbapi.git
+git clone https://github.com/siricco/vdr-plugin-radio.git
+git clone https://github.com/rofafor/vdr-plugin-iptv.git
+
 
 echo "                    Downloading skins "
 
 git clone https://gitlab.com/kamel5/skinlcarsng.git
-wget https://www.dropbox.com/s/806odyj5vyco3dg/lcars_pack.tar.gz
 
 echo "                    Downloading others "
 
-wget https://www.dropbox.com/s/6hzpdx9yv5ypzxv/traduzioni.tar.gz
-wget https://www.dropbox.com/s/yiqugxzvcdpvrij/icone.tar.gz
-wget https://www.dropbox.com/s/4mw9329v90e0joe/oscam.tar.gz
 git clone https://github.com/fiveten59/Logos.git logos
 #
-chmod -R 777 *;;
+cd ..
+chmod -R 777 Vdr_repo;;
 z) ;;
 esac ;;
 
@@ -459,64 +376,53 @@ esac ;;
 
 2)
 clear
-cd /usr/local/src
+cd $SRC
 mkdir -p ffmpeg_sources
-cd /usr/local/src/ffmpeg_sources
 #
 clear
 dialog --title "   ** Common Libs (Ffmpeg) & Infra-Red Remotes Control (Eventlircd)**   " --infobox "
    ---------------------------------------------------------------------------------------------
 
-        *****  Install  *****  .....................  *****  Remove  *****
+        *****  Install  *****  .....................
         
-        [a]    Installing Sat firmware
-        [b]    Rpi-FFmpeg  .......................  [b1]    Rpi-FFMPEG
-        [c]    Eventlircd ........................  [c1]    Eventlircd
+        [a]    Rpi-FFmpeg
+        [b]    Eventlircd       
+        [c]    Installing Sat firmware
+
+        *****  Remove  *****
+        
+        [a1]    Rpi-FFMPEG        
+        [b1]    Eventlircd         
+        
         [z]    Skip
 
    --------------------------------------------------------------------------------------------- " 0 0
-    echo -n "        Enter your menu choice  = Install [a-c] ~~ Remove [a1-c1] ~~ Skip [z]     "
-    read yourch
-    case $yourch in
+echo -n "        Enter your menu choice  = Install [a-c] ~~ Remove [a1-b1] ~~ Skip [z]     "
+read yourch
+case $yourch in
 #
 a)
 clear
-echo "                    Installing Sat firmware & drivers"
-sleep 2
-if [ -f /usr/local/src/driver_dvb/check ]
-then echo " Sat firmwares & drivers are already installed"; sleep 1
-else
-cd /usr/local/src
-cp -rf /home/`logname`/Vdrrepo/driver_dvb.tar.gz /usr/local/src
-tar -zxvf driver_dvb.tar.gz
-rm -rf driver_dvb.tar.gz
-cd driver_dvb
-cp -rf *.fw /lib/firmware/
-cd dvbsky-firmware
-cp -rf *.fw /lib/firmware/
-echo " Sat firmwares & drivers are now installed"; sleep 2
-fi;;
-#
-b)
-clear
 echo "                    Installing Rpi-FFmpeg"
 sleep 2
-if [ -d /usr/local/src/ffmpeg_sources/rpi-ffmpeg ]
+if [ -d $SRC/ffmpeg_sources/rpi-ffmpeg ]
 then echo "Rpi-FFMPEG is already installed"; sleep 3
 else
 apt-get -y install libavfilter-dev libx265-dev libdrm-dev libavcodec-dev
 apt-get -y install libavformat-dev libswresample-dev libswscale-dev libudev-dev
 apt-get -y install libxcb-dpms0-dev libxcb-glx0-dev libxcb-randr0-dev libxcb-screensaver0-dev
 apt-get -y install libxcb-xv0-dev libxcb-image0-dev libxcb-util0-dev libxcb-icccm4-dev libxcb-keysyms1-dev
-cd /usr/local/src/ffmpeg_sources
+cd $SRC/ffmpeg_sources
 sleep 1
-cp -rf /home/`logname`/Vdrrepo/main.zip /usr/local/src/ffmpeg_sources/
+cp -rf $REPO/main.zip $SRC/ffmpeg_sources/
 unzip main.zip
 mv -f rpi-ffmpeg-test-4.3.5-main rpi-ffmpeg
 cd rpi-ffmpeg
+#dmesg | grep -i arm64 > $TEMP/release_check
+#if cat $TEMP/release_check | grep "arm64"
 clear
-dmesg | grep -i arm64 > $TEMP/release_check
-if cat $TEMP/release_check | grep "arm64"; 
+getconf LONG_BIT > $TEMP/release_check
+if cat $TEMP/release_check | grep "64"
 then echo "64 bit system detected"
 echo "                    Wait for a few seconds ... take a good coffee"
 ./configure --extra-libs="-ldl" --arch=arm64 --enable-sand --enable-v4l2_m2m --enable-v4l2-request --enable-libudev --enable-libdrm --enable-libx265 --disable-rpi --enable-gpl --enable-pic --enable-avfilter --enable-nonfree --enable-gpl --enable-iconv --enable-network --enable-pthreads --disable-vdpau --disable-vaapi --enable-version3 --enable-shared
@@ -535,21 +441,21 @@ sleep 3
 apt-mark hold ffmpeg
 fi;;
 #
-c)
+b)
 clear
 echo "                 *** Installing Infra-Red Remotes Control (Eventlircd) ***"
 sleep 2
 if [ -d /usr/sbin/eventlircd ]
-then echo " Eventlircd is already installed" 
+then echo " Eventlircd is already installed"
 sleep 2
 else 
 apt-get -y install gawk libudev-dev evtest lirc ir-keytable
-cd /usr/local/src
-cp -rf /home/`logname`/Vdrrepo/eventlircd /usr/local/src
+cd $SRC
+cp -rf $REPO/eventlircd $SRC
+cp -rf $REPO/eventlircd_patch.tar.gz $SRC/eventlircd
 cd eventlircd
-wget https://www.dropbox.com/s/5qyshoaz1z97auu/eventlircd_patch.tar.gz
 tar -zxvf eventlircd_patch.tar.gz
-mv -f eventlircd_patch.tar.gz /home/`logname`/Vdrrepo
+rm -rf eventlircd_patch.tar.gz
 patch -p1 < eventlircd_makefile.patch
 patch -p1 < eventlircd_configure.patch
 patch -p1 < eventlircd_version.patch
@@ -560,9 +466,9 @@ make && make install
 echo 'uinput
 i2c-dev
 ir-kbd-i2c' >> /etc/modules
-cd /usr/local/src
-wget https://www.dropbox.com/s/pou5xp8yuxkgvzw/eventlircd.conf.tar.gz
-tar -zxvf eventlircd.conf.tar.gz
+cd $SRC
+cp -rf $REPO/eventlircd_conf.tar.gz $SRC
+tar -zxvf eventlircd_conf.tar.gz
 mv -f evmap.tar.gz /etc/eventlircd.d
 mv -f rules.tar.gz /lib/udev/rules.d
 rm -rf /lib/udev/rc_keymaps
@@ -571,16 +477,14 @@ cd /lib/udev/rc_keymaps
 chmod 0644 *
 cd /etc/eventlircd.d
 tar -zxvf evmap.tar.gz
-chmod 0644 *
 rm -rf evmap.tar.gz
+chmod 0644 *
 cd /lib/udev/rules.d
 #rm -rf 98-eventlircd.rules.disabled
 #rm -rf 98-lircd.rules.disabled
 tar -zxvf rules.tar.gz
-chmod 0644 *
 rm -rf rules.tar.gz
-cd /usr/local/src
-mv -f eventlircd.conf.tar.gz /home/`logname`/Vdrrepo
+chmod 0644 *
 sleep 2
 #
 echo "                *** Create Eventircd start command line (if installed)***"
@@ -642,31 +546,53 @@ rm -rf start-eventlircd.sh
 touch start-eventlircd.sh
 echo '#!/bin/sh
 
-sleep 5
+sleep 2
 sudo /etc/init.d/eventlircd start > /dev/null 2>&1' >> start-eventlircd.sh
 chmod 777 start-eventlircd.sh
 echo "Eventlircd is now installed"
 sleep 2
 fi;;
 #
-b1)
+c)
+clear
+echo "                    Installing Sat firmware"
+sleep 2
+if [ -f $SRC/driver_dvb/check ]
+then echo " Sat firmwares are already installed"; sleep 2
+else
+cp -rf /home/'logname'/Vdr_repo/driver_dvb.tar.gz $SRC
+cd $SRC
+tar -zxvf driver_dvb.tar.gz
+rm -rf driver_dvb.tar.gz
+cd driver_dvb
+cp -rf *.fw /lib/firmware/
+cd dvbsky-firmware
+cp -rf *.fw /lib/firmware/
+echo " Sat firmwares & drivers are now installed"; sleep 2
+fi;;
+#
+a1)
 clear
 echo "                    Removing Rpi-FFmpeg "
 sleep 2
 cd $PACKAGES
-dpkg -rf rpi-ffmpeg.deb
-rm -rf /usr/local/src/ffmpeg_sources/rpi-ffmpeg
-rm -rf $PACKAGES/rpi-ffmpeg*.deb;;
+dpkg -r rpi-ffmpeg.deb
+rm -rf /bin/ffmpeg
+rm -rf /usr/local/bin/ffmpeg
+rm -rf $SRC/ffmpeg_sources/rpi-ffmpeg
+rm -rf /usr/share/ffmpeg
+rm -rf /usr/share/doc/ffmpeg
+rm -rf $PACKAGES/ffmpeg*.deb;;
 #
-c1)
+b1)
 clear
 echo "                    Removing Eventlircd "
 cd /etc/init.d
 update-rc.d eventlircd remove
 rm -rf /etc/modules
+rm -rf /etc/init.d/eventlircd
 rm -rf /etc/eventlircd.d
 rm -rf /usr/sbin/eventlircd
-rm -rf /etc/init.d/eventlircd 
 rm -rf /usr/local/bin/start-eventlircd.sh
 rm -rf /etc/sudoers.d/eventlircd
 rm -rf $SRC/eventlircd;;
@@ -676,7 +602,6 @@ esac;;
 #############################################################
 
 3)
-
 clear
     dialog --title "   ** Install/Remove VDR-2.6.4   **   " --infobox "
 
@@ -701,35 +626,39 @@ apt-get -y install libfreetype6-dev libfontconfig1-dev libfribidi-dev gettext
 apt-get -y install libncurses5-dev libncursesw5-dev
 #
 cd $SRC
-cp -rf /home/`logname`/Vdrrepo/vdr-2.6.4 $SRC
+cp -rf $REPO/vdr-2.6.4 $SRC
 ln -s $VDR vdr
 #
 echo " Patching VDR      "
 sleep 1
 cd vdr
-cp -rf /home/`logname`/Vdrrepo/vdr-patches.2.6.4.tar.gz $SRC/vdr/
+cp -rf $REPO/vdr-patches.2.6.4.tar.gz $SRC/vdr/
 tar -zxvf vdr-patches.2.6.4.tar.gz
 rm -rf vdr-patches.2.6.4.tar.gz
 sleep 1
 #
 echo " *** Patching avcdescriptor ***"
 patch -p1 < vdr_avcdescriptor.patch
-echo " *** config ***"
+echo " *** Patching config ***"
 patch -p1 < vdr_config.patch
 echo " *** Patching dvb power saving feature ***"
 patch -p1 < vdr_dvb_power_saving_feature.patch
 echo " *** Patching maxdevice ***"
 patch -p1 < vdr_maxdevice.patch
 echo " *** Patching vdr_menuorg ***"
-    patch -p1 < vdr_menuorg.patch
+patch -p1 < vdr_menuorg.patch
 echo " *** Patching menuselection ***"
 patch -p1 < vdr_menuselection.patch
 echo " *** Patching svdrphosts ***"
 patch -p1 < vdr_svdrphosts.patch
 echo " *** Patching ttxtsub ***"
 patch -p1 < vdr_ttxtsub.patch
+#echo " *** Patching ttxtsub ***"
+#patch -p1 < patch_ttxtsubs.patch
 echo " *** Patching wareagleicon ***"
 patch -p1 < vdr_wareagleicon.patch
+echo " *** Patching channellscan ***"
+patch -p1 < vdr-dvbchan.patch
 echo " *** Patching zapcockpit ***"
 patch -p1 < vdr_zapcockpit.patch
 #
@@ -738,7 +667,7 @@ clear
 echo "                *** Final compilation ***"
 sleep 3
 echo ""
-cd /usr/local/src/vdr
+cd $SRC/vdr
 checkinstall --fstrans=no --install=yes --pkgname=vdr --pkgversion "2.6.4" --pakdir=$PACKAGES --default
 cp *.conf /etc/vdr
 #
@@ -830,7 +759,7 @@ apt-get -y install libglm-dev libxcb-screensaver0-dev libxcb-dpms0-dev
 apt-get -y install libxcb-ewmh-dev libva-dev libx265-dev libasound2-dev
 cd $VDRSRC
 git clone https://github.com/zillevdr/vdr-plugin-softhddevice-drm.git
-cp -rf vdr-plugin-softhddevice-drm /home/`logname`/Vdrrepo/
+cp -rf vdr-plugin-softhddevice-drm $REPO/
 mv vdr-plugin-softhddevice-drm softhddevice-drm
 cd softhddevice-drm
 make && make install;;
@@ -843,7 +772,7 @@ if [ -f /opt/vc/lib/libvcos.so ]; then
   echo " Userland is already installed"
 else
 git clone https://github.com/raspberrypi/userland.git
-cp -rf /$SRC/userland /home/`logname`/Vdrrepo/
+cp -rf /$SRC/userland $REPO/
 cd userland
 ./buildme
 fi
@@ -852,7 +781,7 @@ cd $VDRSRC
 apt-get -y install libraspberrypi-bin libraspberrypi-dev libraspberrypi-doc libraspberrypi0
 apt-get -y install libomxil-bellagio-dev libomxil-bellagio-bin libomxil-bellagio0
 git clone https://github.com/vdr-projects/vdr-plugin-rpihddevice.git
-cp -rf vdr-plugin-rpihddevice /home/`logname`/Vdrrepo/
+cp -rf vdr-plugin-rpihddevice $REPO/
 mv vdr-plugin-rpihddevice rpihddevice
 cd rpihddevice
 make && make install;;
@@ -862,9 +791,9 @@ esac
 echo "               *** Skinlcarsng ***"
 sleep 2
 cd $VDRSRC
-cp -rf /home/`logname`/Vdrrepo/skinlcarsng /$VDRSRC
+cp -rf $REPO/skinlcarsng /$VDRSRC
 cd skinlcarsng
-make && make install
+make clean && make && make install
 cd /etc/vdr/themes
 ln -s lcars-BlueGlass.theme lcarsng-Bluegass.theme
 ln -s lcars-390Lb.theme lcarsng-390Lb.theme
@@ -874,10 +803,10 @@ echo "               *** Iptv ***"
 sleep 2
 apt-get -y install vlc libcurl4 libcurl4-gnutls-dev
 cd $VDRSRC
-cp -rf /home/`logname`/Vdrrepo/vdr-plugin-iptv /$VDRSRC
+cp -rf $REPO/vdr-plugin-iptv /$VDRSRC
 mv vdr-plugin-iptv iptv
 cd iptv
-cp -rf /home/`logname`/Vdrrepo/patch_iptv.tar.gz /$VDRSRC/iptv
+cp -rf $REPO/patch_iptv.tar.gz /$VDRSRC/iptv
 tar -zxvf patch_iptv.tar.gz
 rm -rf patch_iptv.tar.gz
 patch -p1 < 10_iptv_protocolext.patch
@@ -888,7 +817,7 @@ make plugins
 echo "               *** Radio ***"
 sleep 2
 cd $VDRSRC
-cp -rf /home/`logname`/Vdrrepo/vdr-plugin-radio /$VDRSRC
+cp -rf $REPO/vdr-plugin-radio /$VDRSRC
 mv vdr-plugin-radio radio
 cd radio
 make
@@ -898,7 +827,7 @@ cd $PLUGINS
 mkdir -p radio
 cd radio
 cp -rf $VDRSRC/radio/config/mpegstill/* /$PLUGINS/radio/
-cp -rf /home/`logname`/Vdrrepo/radio_scripts.tar.gz /$PLUGINS/radio/
+cp -rf $REPO/radio_scripts.tar.gz /$PLUGINS/radio/
 tar -zxvf radio_scripts.tar.gz
 rm -rf radio_scripts.tar.gz
 #
@@ -925,7 +854,8 @@ rm -rf libvdr-dvbapi.*;;
 z);;
 #
 esac;;
-###########################################################
+#############################################################
+
 5)
 clear
 dialog --title "   ** Configuring VDR   " --infobox "
@@ -951,18 +881,22 @@ if [ -f $SRC/icone/vdr.jpg ]
 then echo " Icons $Remind4"
 sleep 2
 else cd $SRC
-cp -rf /home/`logname`/Vdrrepo/icone.tar.gz /usr/local/src/
+cp -rf $REPO/icone.tar.gz $SRC
 tar -zxvf icone.tar.gz
 rm -rf icone.tar.gz
+echo "Icons installed"
+sleep 2
 fi
 #
 echo " Installing Italian translation for some plugins "
 cd $SRC
 mkdir -p traduzioni
 cd traduzioni
-cp /home/`logname`/Vdrrepo/traduzioni.tar.gz /$SRC/traduzioni/
+cp $REPO/traduzioni.tar.gz /$SRC/traduzioni/
 tar -zxvf traduzioni.tar.gz
 rm -rf traduzioni.tar.gz
+echo "Italian translation installed"
+sleep 2
 #
 echo "*** keymacros.conf setup ***"
 rm -rf /etc/vdr/keymacros.conf
@@ -981,19 +915,24 @@ Green     @channelscan
 Yellow    Info
 Blue      @tvguide
 Ok        Channels" >> /etc/vdr/keymacros.conf
-
-echo "                    Installing true type"
+echo "Keymacros installed"
+sleep 2
+#
+echo "                    Installing True Type fonts"
 sleep 2
 if [ -d /usr/share/fonts/truetype/vdrsymbols ];
 then echo " Fonts $Remind4"
 sleep 2
-else cp -rf /home/`logname`/Vdrrepo/vdrsymbols.tar.gz /usr/share/fonts/truetype/
+else cp -rf $REPO/vdrsymbols.tar.gz /usr/share/fonts/truetype/
 cd /usr/share/fonts/truetype/
 tar -zxvf vdrsymbols.tar.gz
+rm -rf vdrsymbols.tar.gz
 fc-cache -fv
+echo "True Type fonts installed"
+sleep 2
 fi
 #
-echo "                    *** Create init.d Vdr ***"
+echo "                    *** Create Vdr Start & Stop***"
 sleep 2
 rm -rf /etc/init.d/vdr
 touch /etc/init.d/vdr
@@ -1062,15 +1001,20 @@ sudo /etc/init.d/vdr stop > /dev/null 2>&1
 ' >> /usr/local/bin/KillVdr.sh
 chmod 777 /usr/local/bin/KillVdr.sh
 #
+echo "Vdr Start & Stop installed"
+sleep 2
+#
 echo "                    *** Install default Skin for Vdr  ***"
 sleep 2
 if [ -f /etc/vdr/themes/checklcars ]
 then echo " Default Skin is already installed"
-else cp -rf /home/`logname`/Vdrrepo/lcars_pack.tar.gz /etc/vdr/themes
+else cp -rf $REPO/lcars_pack.tar.gz /etc/vdr/themes
 cd /etc/vdr/themes
 tar -zxvf lcars_pack.tar.gz
 cd /etc/vdr/themes
 rm -rf lcars_pack.tar.gz
+echo "Default Skin installed"
+sleep 2
 fi
 #
 echo "                    *** Install Channels logos  ***"
@@ -1078,8 +1022,9 @@ sleep 2
 if [ -f /etc/vdr/logos/2be.png ]
 then echo " Logos are already installed"
 else
-cp -rf /home/`logname`/Vdrrepo/logos /etc/vdr/
+cp -rf $REPO/logos /etc/vdr/
 fi
+echo "Channels logos installed"
 sleep 2
 #
 echo "                    *** Diseqc setup  ***"
@@ -1113,64 +1058,180 @@ echo -n "        Enter your menu choice = Install [a-p] ~~ Skip [z]      "
 read yourch
 case $yourch in
 
-a) clear; echo "$TRIAL" >> /etc/vdr/diseqc.conf && cd /etc/vdr/ && wget https://www.dropbox.com/s/oebo5gddykvxng4/channels.conf.trial.tar.gz && tar -zxvf channels.conf.trial.tar.gz && mv -f /etc/vdr/channels.conf.trial.tar.gz /home/`logname`/Vdrrepo/; echo "Channell list installed"; sleep 2;;
-b) clear; echo "$DUAL" >> /etc/vdr/diseqc.conf && cd /etc/vdr/ && wget https://www.dropbox.com/s/0h0dczjbx288aat/channels.conf.dual.tar.gz && tar -zxvf channels.conf.dual.tar.gz && mv -f /etc/vdr/channels.conf.dual.tar.gz /home/`logname`/Vdrrepo/; echo "Channell list installed"; sleep 2;;
+a) clear
+echo "$TRIAL" >> /etc/vdr/diseqc.conf
+cd /etc/vdr/
+cp -rf $REPO4/channels.conf.trial.tar.gz /etc/vdr/
+tar -zxvf channels.conf.trial.tar.gz
+rm -rf channels.conf.trial.tar.gz
+echo "Channell TRIAL list installed"
+sleep 2;;
+#
+b) clear
+echo "$DUAL" >> /etc/vdr/diseqc.conf
+cd /etc/vdr/
+cp -rf $REPO/channels.conf.dual.tar.gz /etc/vdr/
+tar -zxvf channels.conf.dual.tar.gz
+rm -rf channels.conf.dual.tar.gz
+echo "Channell DUAL list installed"
+sleep 2;;
+#
 # c);;
-d) echo "$MONO9" >> /etc/vdr/diseqc.conf && cd /etc/vdr/ && wget https://www.dropbox.com/s/5ua5501tc74biys/channels-w_scan2-Eutelsat_9.conf.tar.gz && tar -zxvf channels-w_scan2-Eutelsat9.conf.tar.gz && mv -f /etc/vdr/channels-w_scan2-Eutelsat9.conf.tar.gz /home/`logname`/Vdrrepo/; echo "Channell list installed"; sleep 2;;
-e) clear; echo "$MONO13" >> /etc/vdr/diseqc.conf && cd /etc/vdr/ && wget https://www.dropbox.com/s/oebo5gddykvxng4/channels.conf.trial.tar.gz && tar -zxvf channels.conf.trial.tar.gz && mv -f /etc/vdr/channels.conf.trial.tar.gz /home/`logname`/Vdrrepo/; echo "Channell list installed"; sleep 2;;
-f) clear; echo "$MONO19" >> /etc/vdr/diseqc.conf && cd /etc/vdr/ && wget https://www.dropbox.com/s/igp1yulhe9lj4o6/channels-w_scan2-Astra_19.conf.tar.gz && tar -zxvf channels-w_scan2-Astra_19.conf.tar.gz && mv -f /etc/vdr/channels-w_scan2-Astra_19.conf.tar.gz /home/`logname`/Vdrrepo/; echo "Channell list installed"; sleep 2;;
-g) clear; echo "$MONO23" >> /etc/vdr/diseqc.conf && cd /etc/vdr/ && wget https://www.dropbox.com/s/4kd5zwqkmac34nt/channels-w_scan2-Astra23.conf.tar.gz && tar -zxvf channels-w_scan2-Astra23.conf.tar.gz && mv -f /etc/vdr/channels-w_scan2-Astra23.conf.tar.gz /home/`logname`/Vdrrepo/; echo "Channell list installed"; sleep 2;;
-h) clear; echo "$MONO28" >> /etc/vdr/diseqc.conf && cd /etc/vdr/ && wget https://channelpedia.yavdr.com/gen/DVB-S/S28.2E/S28.2E_complete_sorted_by_groups.channels.conf/S28.2E_complete_sorted_by_groups.channels.conf && mv -f S28.2E_complete_sorted_by_groups.channels.conf Astra28_channels.conf && cp -rf Astra28_channels.conf /home/`logname`/Vdrrepo/; echo "Channell list installed"; sleep 2;;
-i) clear; echo "$MONO42" >> /etc/vdr/diseqc.conf && cd /etc/vdr/ && wget https://www.dropbox.com/s/ax4l7pa7ckp9ndk/channels-w_scan2-Turksat.conf.tar.gz && tar -zxvf channels-w_scan2-Turksat.conf.tar.gz && mv -f /etc/vdr/channels-w_scan2-Turksat.conf.tar.gz /home/`logname`/Vdrrepo/; echo "Channell list installed"; sleep 2;;
-l) clear; echo "$MONO08W" >> /etc/vdr/diseqc.conf && cd /etc/vdr/ && wget https://www.dropbox.com/s/sqq40r6i461s1mx/channels-w_scan2-Thor.conf.tar.gz  && tar -zxvf channels-w_scan2-Thor.conf.tar.gz && mv -f /etc/vdr/channels-w_scan2-Thor.conf.tar.gz /home/`logname`/Vdrrepo/; echo "Channell list installed"; sleep 2;;
-# clear; m) echo "$MONO5W" >> /etc/vdr/diseqc.conf && cd /etc/vdr/ && wget https://www.dropbox.com/s/vt0wxz86c3x6y1n/channels-w_scan2-Eutelsat5.tar.gz && cp -rf /etc/vdr/channels-w_scan2-Eutelsat5.tar.gz /home/`logname`/Vdrrepo/ && tar -zxvf channels-w_scan2-Eutelsat5.tar.gz && rm -rf channels-w_scan2-Eutelsat5.tar.gz;;
-n) clear; echo "$MONO30W" >> /etc/vdr/diseqc.conf && cd /etc/vdr/ && wget https://www.dropbox.com/s/vt0wxz86c3x6y1n/channels-w_scan2-Eutelsat5.tar.gz && tar -zxvf channels-w_scan2-Eutelsat5.tar.gz && mv -f /etc/vdr/channels-w_scan2-Eutelsat5.tar.gz /home/`logname`/Vdrrepo/;;
-p) clear; echo "$MONO13_CAMPER" >> /etc/vdr/diseqc.conf && cd /etc/vdr/ && wget https://www.dropbox.com/s/bvqumx2x6hqr9jc/channels.conf.camper.tar.gz && tar -zxvf channels.conf.camper.tar.gz && mv -f /etc/vdr/channels.conf.camper.tar.gz /home/`logname`/Vdrrepo/;;
+d)
+clear
+echo "$MONO9" >> /etc/vdr/diseqc.conf
+cd /etc/vdr/
+cp -rf $REPO/channels-w_scan2-Eutelsat_9.conf.tar.gz /etc/vdr/
+tar -zxvf channels-w_scan2-Eutelsat9.conf.tar.gz
+rm -rf channels-w_scan2-Eutelsat9.conf.tar.gz
+echo "Channell MONO9 list installed"
+sleep 2;;
+#
+e) 
+clear
+echo "$MONO13" >> /etc/vdr/diseqc.conf
+cd /etc/vdr/
+cp -rf $REPO/channels.conf.trial.tar.gz /etc/vdr/
+tar -zxvf channels.conf.trial.tar.gz
+rm -rf channels.conf.trial.tar.gz
+echo "Channell MONO13 list installed"
+sleep 2;;
+#
+f) 
+clear
+echo "$MONO19" >> /etc/vdr/diseqc.conf
+cd /etc/vdr/
+cp -rf $REPO/channels-w_scan2-Astra_19.conf.tar.gz /etc/vdr/
+tar -zxvf channels-w_scan2-Astra_19.conf.tar.gz
+rm -rf channels-w_scan2-Astra_19.conf.tar.gz
+echo "Channell MONO19 list installed"
+sleep 2;;
+#
+g)
+clear
+echo "$MONO23" >> /etc/vdr/diseqc.conf
+cd /etc/vdr/
+cp -rf $REPO/channels-w_scan2-Astra23.conf.tar.gz /etc/vdr/
+tar -zxvf channels-w_scan2-Astra23.conf.tar.gz
+rm -rf channels-w_scan2-Astra23.conf.tar.gz
+echo "Channell MONO23 list installed"
+sleep 2;;
+#
+h)
+clear
+echo "$MONO28" >> /etc/vdr/diseqc.conf
+cd /etc/vdr/
+wget https://channelpedia.yavdr.com/gen/DVB-S/S28.2E/S28.2E_complete_sorted_by_groups.channels.conf/S28.2E_complete_sorted_by_groups.channels.conf
+mv -f S28.2E_complete_sorted_by_groups.channels.conf Astra28_channels.conf
+cp -rf Astra28_channels.conf $REPO/
+echo "Channell MONO28 list installed"
+sleep 2;;
+#
+i)
+clear
+echo "$MONO42" >> /etc/vdr/diseqc.conf
+cd /etc/vdr/
+cp -rf $REPO/channels-w_scan2-Tursat.conf.tar.gz /etc/vdr/
+tar -zxvf channels-w_scan2-Turksat.conf.tar.gz
+rm -rf channels-w_scan2-Turksat.conf.tar.gz
+echo "Channell MONO42 list installed"
+sleep 2;;
+#
+l) clear
+echo "$MONO08W" >> /etc/vdr/diseqc.conf
+cd /etc/vdr/
+cp -rf $REPO/channels-w_scan2-Thor.conf.tar.gz /etc/vdr/
+tar -zxvf channels-w_scan2-Thor.conf.tar.gz
+rm -rf channels-w_scan2-Thor.conf.tar.gz
+echo "Channell MONO08W list installed"
+sleep 2;;
+#
+m)
+clear 
+echo "Not available"
+#echo "$MONO5W" >> /etc/vdr/diseqc.conf
+#cd /etc/vdr/
+#wget 
+#tar -zxvf 
+#rm -rf 
+#echo "Channell MONO5W list installed"
+sleep 2;;
+n)
+clear
+echo "Not available"
+#echo "$MONO30W" >> /etc/vdr/diseqc.conf
+#cd /etc/vdr/
+#cp -rf $REPO/channels-w_scan2-Eutelsat5.tar.gz
+#tar -zxvf channels-w_scan2-Eutelsat5.tar.gz
+#rm -rf /etc/vdr/channels-w_scan2-Eutelsat5.tar.gz
+#echo "Channell MONO30W list installed"
+sleep 2;;
+#
+p)
+clear
+echo "$MONO13_CAMPER" >> /etc/vdr/diseqc.conf
+cd /etc/vdr/
+cp -rf $REPO/channels.conf.camper.tar.gz /etc/vdr/
+tar -zxvf channels.conf.camper.tar.gz
+rm -rf vdr/channels.conf.camper.tar.gz
+echo "Channell MONO13_CAMPER list installed"
+sleep 2;;
+#
 z);;
 esac
 #
 sleep 1
 clear
 echo "                    *** Setup remote  ***"
+cp -rf $REPO/eventlircd-remote.conf.tar.gz /etc/vdr
 cd /etc/vdr
-wget https://www.dropbox.com/s/twximoeme4uwu8f/eventlircd-remote.conf.tar.gz
 tar -zxvf eventlircd-remote.conf.tar.gz
-mv -f /etc/vdr/eventlircd-remote.conf.tar.gz /home/`logname`/Vdrrepo/
+rm -rf eventlircd-remote.conf.tar.gz
+echo "Setup remote installed"
+sleep 2
 #
 
 echo "                    *** Oscam Setup  ***"
 sleep 2
 cd /usr/local
 mkdir -p etc
-if [ -f /usr/local/etc/oscam.check ]
-  then  echo "Oscam is already installed"
+if [ -f $ETC/oscam.check ]
+  then  echo "Oscam conf is already installed"
 else
 apt-get -y install libssl-dev libcrypto++-dev pcscd subversion libpcsclite-dev libusb-1.0-0-dev
+cp -rf $REPO/oscam.tar.gz /$ETC/
 cd $ETC
-cp -rf /home/`logname`/Vdrrepo/oscam.tar.gz /$ETC/
 tar -zxvf oscam.tar.gz
 rm -rf oscam.tar.gz
-#
-dmesg | grep -i arm64 > $TEMP/release_check
-if cat $TEMP/release_check | grep "arm64"; 
+fi
+# questa parte sotto è in dubbio
+if [ -f /usr/local/bin/oscam ]
+  then  echo "Oscam is already installed"
+else
+#dmesg | grep -i arm64 > $TEMP/release_check
+#if cat $TEMP/release_check | grep "arm64"
+getconf LONG_BIT > $TEMP/release_check
+if cat $TEMP/release_check | grep "64"
 then echo "64 bit system detected"
 sleep 1
+cp -rf $REPO/oscam_pcsc-64.tar.gz /usr/local/bin
 cd /usr/local/bin
-wget https://www.dropbox.com/s/6rodipf5hy02laz/oscam_rpi_pcsc_64.tar.gz
-tar -zxvf oscam_rpi_pcsc_64.tar.gz
-rm -rf oscam_rpi_pcsc_64.tar.gz
+tar -zxvf oscam_pcsc-64.tar.gz
+rm -rf oscam_pcsc-64.tar.gz
 else echo "32 bit system detected"
 sleep 1
+cp -rf $REPO/oscam_pcsc-32.tar.gz /usr/local/bin
 cd /usr/local/bin
-wget https://www.dropbox.com/s/tjdzk2yunjodf9c/oscam_rpi_pcsc.tar.gz
-tar -zxvf oscam_rpi_pcsc.tar.gz
-rm -rf oscam_rpi_pcsc.tar.gz
+tar -zxvf oscam_pcsc-32.tar.gz
+rm -rf oscam_pcsc-32.tar.gz
 fi
 rm -rf $TEMP/release_check
 chmod 777 oscam
+echo "Oscam installed"
+sleep 2
 fi
 #
-echo "                    *** Create Oscam start command line ***"
+echo "                    *** Create Oscam start & stop command line ***"
 sleep 2
 rm -rf /etc/init.d/oscam
 touch /etc/init.d/oscam
@@ -1220,7 +1281,7 @@ case "$1" in
 esac
 exit 0
 ' >> /etc/init.d/oscam
-chmod 777 /etc/init.d/oscam
+chmod 755 /etc/init.d/oscam
 #
 rm -rf /usr/local/bin/start-oscam.sh
 touch /usr/local/bin/start-oscam.sh
@@ -1238,17 +1299,22 @@ sudo /etc/init.d/oscam stop > /dev/null 2>&1
 ' >> /usr/local/bin/KillOscam.sh
 chmod 777 /usr/local/bin/KillOscam.sh
 #
-cd /home/`logname`/Vdrrepo/
+echo "Oscam start & stop installed"
+sleep 2
+#
+cd $REPO/
 chmod -R 777 *
 #
 echo "                    Configuring Iptv"
 sleep 2
 sed -i 's/geteuid/getppid/' /usr/bin/vlc
-cp -rf /home/`logname`/Vdrrepo/iptv_conf.tar.gz /$PLUGINS/iptv/
+cp -rf $REPO/iptv_conf.tar.gz /$PLUGINS/iptv/
 cd /$PLUGINS/iptv/
 rm -rf vlc2iptv
 tar -zxvf iptv_conf.tar.gz
 rm -rf iptv_conf.tar.gz
+echo "Iptv configured"
+sleep 2
 #
 echo "             *** Permission to execute Eventlircd - Vdr - Oscam  ***"
 sleep 2
@@ -1265,6 +1331,8 @@ rm -rf /etc/sudoers.d/oscam
 touch /etc/sudoers.d/oscam
 echo "oscam ALL=(ALL) ALL" >> /etc/sudoers.d/oscam
 echo "%`logname` ALL=NOPASSWD: /etc/init.d/oscam" >> /etc/sudoers.d/oscam
+echo "Permissions created"
+sleep 2
 #
 echo "                    *** Desktop Automatic start Eventlircd - Oscam  ***"
 sleep 2
@@ -1277,20 +1345,25 @@ update-rc.d eventlircd remove
 sleep 1
 update-rc.d eventlircd defaults
 sleep 1
+echo "Automatic start Eventlircd - Oscam created"
+sleep 2
 #
-echo "               *** Installing Dvbapi ***"
+echo "               *** Installing Vdr-Plugin-Dvbapi ***"
 sleep 2
 cd $VDRSRC
 apt-get -y install libssl-dev libdvbcsa-dev
 rm -rf dvbapi
 rm -rf /usr/lib/vdr/libvdr-dvbapi.*
-cp -rf /home/`logname`/Vdrrepo/vdr-plugin-dvbapi /$VDRSRC/
+cp -rf $REPO/vdr-plugin-dvbapi /$VDRSRC/
 mv vdr-plugin-dvbapi dvbapi
 cd dvbapi
 make LIBDVBCSA=1
 make LIBDVBCSA=1 install
 cd $VDRSRC
-rm -rf dvbapi;;
+rm -rf dvbapi
+echo "Vdr-Plugin-Dvbapi installed"
+sleep 2
+;;
 #
 b)
 clear
@@ -1298,32 +1371,27 @@ clear
    --------------------------------------------------------
         [a]    Rpi4 Desktop (Bullseye Desktop version 32/64 bit)
         [b]    Rpi4 Console (Bullseye Lite version 32/64 bit)
-        [c]    Skip           
+        [c]    Rpi3 Console (Bullseye Lite version 32 bit)
+        
+        [z]    Skip           
    -------------------------------------------------------- " 0 0
-echo -n "        Enter your menu choice  [a-b] ~~ Skip [c]      "
+echo -n "        Enter your menu choice  [a-c] ~~ Skip [z]      "
 read yourch
 case $yourch in
 #
 a)
 clear
-echo "                    Create Vdr start command line"
+echo " Create Vdr start & stop for Rpi4 Desktop using Softhddevice-drm"
 sleep 2
 rm -rf /usr/local/bin/vdrrun
 touch /usr/local/bin/vdrrun
-echo "                    Configuring Softhddevice-drm"
-sleep 2
-cd /etc/vdr/
-wget https://www.dropbox.com/s/696tvz0ilpvtnys/setup16_softhddevice_drm.tar.gz
-tar -zxvf setup16_softhddevice_drm.tar.gz
-mv -f /etc/vdr/setup16_softhddevice_drm.tar.gz /home/`logname`/Vdrrepo/
-echo '#!/bin/bash
-
-chvt 1;
-sleep 2;
-/usr/bin/vdr -c /etc/vdr -E /var/vdr -l 3 -u root '$PLUGIN_DRM' -s /usr/local/bin/vdrpoweroff ' >> /usr/local/bin/vdrrun
-chmod 777 /usr/local/bin/vdrrun
 #
-clear
+cd /etc/xdg/autostart
+rm -rf vdr-autostart.desktop
+cp -rf $REPO/vdr-autostart.desktop_rpi.tar.gz /etc/xdg/autostart
+tar -zxvf vdr-autostart.desktop_rpi.tar.gz
+rm -rf vdr-autostart.desktop_rpi.tar.gz
+#
 echo "                    *** Create Vdr vdrpoweroff ***"
 sleep 2
 rm -rf /usr/local/bin/vdrpoweroff
@@ -1337,11 +1405,23 @@ sudo chvt 7
 # shutdown -h now' >> /usr/local/bin/vdrpoweroff
 chmod 777 /usr/local/bin/vdrpoweroff
 #
-cd /etc/xdg/autostart
-rm -rf vdr-autostart.desktop
-wget https://www.dropbox.com/s/fh4gj77kby1ivyb/vdr-autostart.desktop_rpi.tar.gz
-tar -zxvf vdr-autostart.desktop_rpi.tar.gz
+echo "                    Configuring Softhddevice-drm"
+sleep 2
+cp -rf $REPO/setup16_softhddevice_drm.tar.gz /etc/vdr/
+cd /etc/vdr/
+tar -zxvf setup16_softhddevice_drm.tar.gz
+rm -rf setup16_softhddevice_drm.tar.gz
+echo '#!/bin/bash
+
+chvt 1;
+sleep 2;
+/usr/bin/vdr -c /etc/vdr -E /var/vdr -l 3 -u root '$PLUGIN_DRM' -s /usr/local/bin/vdrpoweroff ' >> /usr/local/bin/vdrrun
+chmod 777 /usr/local/bin/vdrrun
+echo "Vdr start & stop created"
+sleep 2
 #
+echo "                    *** Setup icons for Rpi 4 Desktop ***"
+sleep 2
 echo "                    *** Setup Vdr icons  ***"
 sleep 2
 rm -rf /home/`logname`/Scrivania/Vdr.desktop
@@ -1354,7 +1434,7 @@ Encoding=UTF-8
 Type=Application
 Name=Vdr
 Description=Start of Vdr
-Icon=/usr/local/src/icone/vdr.png
+Icon=$SRC/icone/vdr.png
 Exec=/usr/local/bin/start-vdr.sh
 " >> /usr/share/applications/Vdr.desktop
 chmod 777 /usr/share/applications/Vdr.desktop
@@ -1371,7 +1451,7 @@ Encoding=UTF-8
 Type=Application
 Name=KillVdr
 Description=Kill Vdr
-Icon=/usr/local/src/icone/killvdr.png
+Icon=$SRC/icone/killvdr.png
 Exec=/usr/local/bin/KillVdr.sh
 " >> /usr/share/applications/KillVdr.desktop
 chmod 777 /usr/share/applications/KillVdr.desktop
@@ -1388,7 +1468,7 @@ Encoding=UTF-8
 Type=Application
 Name=Oscam
 Description=Oscam Start
-Icon=/usr/local/src/icone/Oscam.png
+Icon=$SRC/icone/Oscam.png
 Exec=/usr/local/bin/start-oscam.sh
 " >> /usr/share/applications/Oscam.desktop
 chmod 777 /usr/share/applications/Oscam.desktop
@@ -1404,10 +1484,13 @@ Encoding=UTF-8
 Type=Application
 Name=KillOscam
 Description=Kill Oscam
-Icon=/usr/local/src/icone/killoscam.png
+Icon=$SRC/icone/killoscam.png
 Exec=/usr/local/bin/KillOscam.sh
 " >> /usr/share/applications/KillOscam.desktop
 chmod 777 /usr/share/applications/KillOscam.desktop
+#
+echo "                    *** Setup icons for Rpi 4 Desktop installed***"
+sleep 2
 #
 ln -s /usr/local/bin/vdrrun /home/`logname`/vdrrun
 chmod 777 /home/`logname`/vdrrun
@@ -1419,16 +1502,16 @@ sleep 3;;
 #
 b)
 clear
-echo "                    Create Vdr Console start command line"
+echo "Create Vdr start & stop for Rpi4 Console using Softhddevice-drm"
 sleep 2
 rm -rf /usr/local/bin/vdrrun
 touch /usr/local/bin/vdrrun
 echo "                    Configuring Softhddevice-drm"
 sleep 2
+cp -rf $REPO/setup16_softhddevice_drm.tar.gz /etc/vdr/
 cd /etc/vdr/
-wget https://www.dropbox.com/s/696tvz0ilpvtnys/setup16_softhddevice_drm.tar.gz
 tar -zxvf setup16_softhddevice_drm.tar.gz
-mv -f /etc/vdr/setup16_softhddevice_drm.tar.gz /home/`logname`/Vdrrepo/
+rm -rf setup16_softhddevice_drm.tar.gz 
 echo '#!/bin/bash
 
 /usr/bin/vdr -c /etc/vdr -E /var/vdr -l 3 -u root '$PLUGIN_DRM' -s /usr/local/bin/vdrpoweroff ' >> /usr/local/bin/vdrrun
@@ -1446,6 +1529,9 @@ killall -9 vdr & killall -9 vlc & killall -9 oscam & shutdown -h now
 ' >> /usr/local/bin/vdrpoweroff
 chmod 777 /usr/local/bin/vdrpoweroff
 #
+echo "Vdr start & stop created for Rpi 4 Console"
+sleep 2
+#
 sleep 2
 sed -i 's|dtparam=audio=on|#dtparam=audio=on|' /boot/config.txt
 echo "disable_splash=1" >> /boot/config.txt
@@ -1457,7 +1543,7 @@ cp -rf $SRC/icone/splash.png /usr/share/plymouth/themes/pix/
 #
 cd /etc
 rm -rf rc.local
-wget https://www.dropbox.com/s/6bah32v12bawetd/rpi_rc.local.tar.gz
+cp -rf $REPO/rpi_rc.local.tar.gz /etc
 tar -zxvf rpi_rc.local.tar.gz
 rm -rf rpi_rc.local.tar.gz
 #
@@ -1466,23 +1552,23 @@ chmod 777 /home/`logname`/vdrrun
 #
 echo "                    *** Done! ***"
 sleep 1
-echo "                    *** installation completed! ***" 
+echo "                    *** Installation completed! ***"
 sleep 3;;
 c);;
 esac;;
 #
 c)
 clear
-echo "                    Create Vdr Console start command line"
+echo "Create Vdr Console start & stop command line for Rpi 3 using Rpihddevice"
 sleep 2
 rm -rf /usr/local/bin/vdrrun
 touch /usr/local/bin/vdrrun
 echo "                    Configuring Rpihddevice"
 sleep 2
+cp -rf $REPO/setup16_rpihddevice.tar.gz /etc/vdr/
 cd /etc/vdr/
-wget https://www.dropbox.com/s/3fnafd18btcfv6v/setup16_rpihddevice.tar.gz
 tar -zxvf setup16_rpihddevice.tar.gz
-mv -f /etc/vdr/setup16_rpihddevice.tar.gz /home/`logname`/Vdrrepo/
+rm -rf setup16_rpihddevice.tar.gz
 #
 echo '#!/bin/bash
 
@@ -1508,10 +1594,13 @@ echo "                    *** Console Automatic start Vdr  ***"
 sleep 2
 cd /etc
 rm -rf rc.local
-wget https://www.dropbox.com/s/6bah32v12bawetd/rpi_rc.local.tar.gz
+cp -rf $REPO/rpi_rc.local.tar.gz
 tar -zxvf rpi_rc.local.tar.gz
 rm -rf rpi_rc.local.tar.gz
 chmod 777 rc.local
+#
+echo "Vdr start & stop created"
+sleep 2
 #
 echo "                    *** Console Boot ***"
 sleep 2
