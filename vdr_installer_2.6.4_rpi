@@ -257,7 +257,7 @@ read yourch
 case $yourch in
 #
 a) clear
-echo " Downloading libs - progs & patch for Vdr - Intel & Nvidia Video devices on local repo "
+echo " Downloading libs - progs & patch for Vdr on local repo "
 sleep 2
 
 if [ -d /home/`logname`/Vdr_repo ]; then
