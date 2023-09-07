@@ -211,37 +211,37 @@ dialog --title "   *****   VDR Rpi Version Installer Script - Libraries & Codec 
                                 Download & Upgrade Local Repository
            ......................................................................................  
 	   [1]    +[Submenu] ~~  Local Repository Directory ~ Install - Upgrade
-	   ======================================================================================= 
+	   =======================================================================================
 				Sat Firmware & Audio Video & Infrared Control
            ......................................................................................  
 	   [2]    +[Submenu] ~~  Install & Uninstall
-	   ======================================================================================= 
+	   =======================================================================================
 	   				   VDR
            ......................................................................................  
 	   [3]    +[Submenu] ~~  Install & Uninstall
-	   ======================================================================================= 			
+	   =======================================================================================			
 	   				Vdr Plugns
            ......................................................................................  
 	   [4]    +[Submenu] ~~  Install & Uninstall
-	   ======================================================================================= 
-	   				VDR Setup
+	   ======================================================================================= 			
+	   				Shared parts
+           ......................................................................................  
+	   [5]    Install (icons fonts channells diseqc start-scripts & others)	   
+	   =======================================================================================
+	   			       Final VDR Setup
 	   ......................................................................................
-	   [5]    +[Submenu] ~~  Shared parts - Raspberry Pi4 - Raspberry Pi3
+	   [6]    +[Submenu] ~~  Raspberry Pi4 - Raspberry Pi3
 	   ======================================================================================= 
 	   			     Exit Setup Menu
 	   ......................................................................................
-	   [6]     Exit
+	   [7]     Exit
 	 ========================================================================================= " 0 0
 
-echo -n "              Enter your menu choice = Submenu [1~5] -- Exit [6] :        "
+echo -n "              Enter your menu choice = Submenu [1~6] -- Exit [7] :        "
 read yourch
 case $yourch in
 #
 1)
-cd /home/`logname`
-#mkdir -p Vdr_repo
-#chmod -R 777 Vdr_repo
-#cd Vdr_repo
 clear
 dialog --title "   ** Download & Upgrade Local Repository **   " --infobox "
    ---------------------------------------------------------------------------------------------
@@ -435,15 +435,16 @@ rm -rf $TEMP/release_check
     echo "                    Press Enter to continue ...               "
     read enterKey
 make -j10
-checkinstall --pkgname=rpi-ffmpeg --pkgversion="4.3.5" --backup=no --deldoc=yes --fstrans=no --default --pakdir=$PACKAGES
+#checkinstall --pkgname=rpi-ffmpeg --pkgversion="4.3.5" --backup=no --deldoc=yes --fstrans=no --default --pakdir=$PACKAGES
+make install
 echo "Rpi-FFmpeg is now installed"
-sleep 3
+sleep 2
 apt-mark hold ffmpeg
 fi;;
 #
 b)
 clear
-echo "                 *** Installing Infra-Red Remotes Control (Eventlircd) ***"
+echo "                    Installing Infra-Red Remotes Control (Eventlircd) "
 sleep 2
 if [ -d /usr/sbin/eventlircd ]
 then echo " Eventlircd is already installed"
@@ -487,7 +488,7 @@ rm -rf rules.tar.gz
 chmod 0644 *
 sleep 2
 #
-echo "                *** Create Eventircd start command line (if installed)***"
+echo "                    Create Eventircd start command line (if installed) "
 sleep 2
 cd /etc/init.d/
 rm -rf eventlircd
@@ -549,13 +550,12 @@ echo '#!/bin/sh
 sleep 2
 sudo /etc/init.d/eventlircd start > /dev/null 2>&1' >> start-eventlircd.sh
 chmod 777 start-eventlircd.sh
-echo "Eventlircd is now installed"
-sleep 2
+echo "Eventlircd is now installed"; sleep 2
 fi;;
 #
 c)
 clear
-echo "                    Installing Sat firmware"
+echo "                    Installing Sat firmware "
 sleep 2
 if [ -f $SRC/driver_dvb/check ]
 then echo " Sat firmwares are already installed"; sleep 2
@@ -575,14 +575,13 @@ a1)
 clear
 echo "                    Removing Rpi-FFmpeg "
 sleep 2
-cd $PACKAGES
-dpkg -r rpi-ffmpeg.deb
 rm -rf /bin/ffmpeg
 rm -rf /usr/local/bin/ffmpeg
 rm -rf $SRC/ffmpeg_sources/rpi-ffmpeg
 rm -rf /usr/share/ffmpeg
 rm -rf /usr/share/doc/ffmpeg
-rm -rf $PACKAGES/ffmpeg*.deb;;
+echo " Rpi-FFmpeg removed "; sleep 2
+;;
 #
 b1)
 clear
@@ -595,7 +594,9 @@ rm -rf /etc/eventlircd.d
 rm -rf /usr/sbin/eventlircd
 rm -rf /usr/local/bin/start-eventlircd.sh
 rm -rf /etc/sudoers.d/eventlircd
-rm -rf $SRC/eventlircd;;
+rm -rf $SRC/eventlircd
+echo " Eventlircd removed "; sleep 2
+;;
 #
 z);;
 esac;;
@@ -618,7 +619,7 @@ clear
 
 a)
 clear
-echo " Installing VDR      "
+echo "                    Installing VDR "
 sleep 2
 echo "*** Installing libraries ***"; sleep 4
 apt-get -y install libjpeg-dev libcap-dev libtinyxml-dev binutils libglibmm-2.4-dev g++
@@ -629,7 +630,7 @@ cd $SRC
 cp -rf $REPO/vdr-2.6.4 $SRC
 ln -s $VDR vdr
 #
-echo " Patching VDR      "
+echo "                    Patching VDR "
 sleep 1
 cd vdr
 cp -rf $REPO/vdr-patches.2.6.4.tar.gz $SRC/vdr/
@@ -637,38 +638,38 @@ tar -zxvf vdr-patches.2.6.4.tar.gz
 rm -rf vdr-patches.2.6.4.tar.gz
 sleep 1
 #
-echo " *** Patching avcdescriptor ***"
+echo "                    Patching avcdescriptor "
 patch -p1 < vdr_avcdescriptor.patch
-echo " *** Patching config ***"
+echo "                    Patching config "
 patch -p1 < vdr_config.patch
-echo " *** Patching dvb power saving feature ***"
+echo "                    Patching dvb power saving feature "
 patch -p1 < vdr_dvb_power_saving_feature.patch
-echo " *** Patching maxdevice ***"
+echo "                    Patching maxdevice "
 patch -p1 < vdr_maxdevice.patch
-echo " *** Patching vdr_menuorg ***"
+echo "                    Patching vdr_menuorg "
 patch -p1 < vdr_menuorg.patch
-echo " *** Patching menuselection ***"
+echo "                    Patching menuselection "
 patch -p1 < vdr_menuselection.patch
-echo " *** Patching svdrphosts ***"
+echo "                    Patching svdrphosts "
 patch -p1 < vdr_svdrphosts.patch
-echo " *** Patching ttxtsub ***"
+echo "                    Patching ttxtsub "
 patch -p1 < vdr_ttxtsub.patch
-#echo " *** Patching ttxtsub ***"
+#echo "                     Patching ttxtsub "
 #patch -p1 < patch_ttxtsubs.patch
-echo " *** Patching wareagleicon ***"
+echo "                    Patching wareagleicon "
 patch -p1 < vdr_wareagleicon.patch
-echo " *** Patching channellscan ***"
+echo "                    Patching channellscan "
 patch -p1 < vdr-dvbchan.patch
-echo " *** Patching zapcockpit ***"
+echo "                    Patching zapcockpit "
 patch -p1 < vdr_zapcockpit.patch
 #
 make && make plugins
 clear
-echo "                *** Final compilation ***"
+echo "                    Final compilation "
 sleep 3
-echo ""
-cd $SRC/vdr
-checkinstall --fstrans=no --install=yes --pkgname=vdr --pkgversion "2.6.4" --pakdir=$PACKAGES --default
+#checkinstall --fstrans=no --install=yes --pkgname=vdr --pkgversion "2.6.4" --pakdir=$PACKAGES --default
+make install
+echo "                    VDR-2.6.4 installed "; sleep 2
 cp *.conf /etc/vdr
 #
 apt-mark hold vdr
@@ -689,8 +690,6 @@ rm -rf /usr/local/bin/vdrrun
 rm -rf /usr/local/lib/vdr
 rm -rf /usr/local/bin/vdr-*
 rm -rf /usr/bin/vdr
-rm -rf /usr/local/bin/start-vdr-xine.sh
-rm -rf /usr/local/bin/start-xinelib-vdr.sh
 rm -rf /usr/local/share/vdr
 rm -rf /usr/local/bin/start-vdr.sh
 rm -rf /usr/local/bin/KillVdr.sh
@@ -698,14 +697,13 @@ rm -rf /home/`logname`/Scrivania/Vdr.desktop
 rm -rf /home/`logname`/Scrivania/KillVdr.desktop
 rm -rf /usr/share/applications/Vdr.desktop
 rm -rf /usr/share/applications/KillVdr.desktop
-#rm -rf /etc/xdg/autostart/Vdr.desktop
-#rm -rf /etc/xdg/autostart/Oscam.desktop
+rm -rf /etc/xdg/autostart/vdr-autostart.desktop
 cd $SRC
 rm -rf vdr vdr-*
-cd packages
-rm -rf vdr*.deb
 sed -i 's|disable_splash=1||' /boot/config.txt
-sed -i 's/ splash quiet plymouth.ignore-serial-consoles logo.nologo vt.global_cursor_default=0//' /boot/cmdline.txt;;
+sed -i 's/ splash quiet plymouth.ignore-serial-consoles logo.nologo vt.global_cursor_default=0//' /boot/cmdline.txt
+echo "                    VDR-2.6.4 removed "; sleep 2
+;;
 #
 z);;
 esac;;
@@ -717,7 +715,7 @@ clear
 
    ---------------------------------------------------------------------------------------------
 
-        [a]  Install VDR-2.6.4 - Plugins
+        [a]  Install VDR-2.6.4 - Plugins & Shared parts                    
         [b]  Remove VDR-2.6.4 - Plugins
 
         [z]  Skip
@@ -753,7 +751,7 @@ clear
 #
 a)
 clear
-echo "               *** Softhddevice-drm  (Only Rpi4) ***"
+echo "                    Softhddevice-drm (Only Rpi4) "
 sleep 2
 apt-get -y install libglm-dev libxcb-screensaver0-dev libxcb-dpms0-dev 
 apt-get -y install libxcb-ewmh-dev libva-dev libx265-dev libasound2-dev
@@ -765,7 +763,7 @@ cd softhddevice-drm
 make && make install;;
 b)
 clear
-echo "               *** Rpihddevice  (Only Rpi3) ***"
+echo "                    Rpihddevice (Only Rpi3) "
 sleep 2
 cd $SRC
 if [ -f /opt/vc/lib/libvcos.so ]; then
@@ -788,7 +786,7 @@ make && make install;;
 z);;
 esac
 #
-echo "               *** Skinlcarsng ***"
+echo "                    Skinlcarsng "
 sleep 2
 cd $VDRSRC
 cp -rf $REPO/skinlcarsng /$VDRSRC
@@ -799,7 +797,7 @@ ln -s lcars-BlueGlass.theme lcarsng-Bluegass.theme
 ln -s lcars-390Lb.theme lcarsng-390Lb.theme
 ln -s lcars-LbSense.theme lcarsng-LbSense.theme
 #
-echo "               *** Iptv ***"
+echo "                    Iptv "
 sleep 2
 apt-get -y install vlc libcurl4 libcurl4-gnutls-dev
 cd $VDRSRC
@@ -814,7 +812,7 @@ make
 cd ../../..
 make plugins
 #
-echo "               *** Radio ***"
+echo "                    Radio "
 sleep 2
 cd $VDRSRC
 cp -rf $REPO/vdr-plugin-radio /$VDRSRC
@@ -832,7 +830,9 @@ tar -zxvf radio_scripts.tar.gz
 rm -rf radio_scripts.tar.gz
 #
 cd $SRC/vdr
-make plugins install;;
+make plugins install
+echo "                    VDR-2.6.4 plugins installed "; sleep 2
+;;
 #
 b)
 clear
@@ -850,32 +850,31 @@ rm -rf libvdr-rpihddevice.*
 rm -rf libvdr-skinlcarsng.*
 rm -rf libvdr-iptv.*
 rm -rf libvdr-radio.*
-rm -rf libvdr-dvbapi.*;;
+rm -rf libvdr-dvbapi.*
+echo "                    VDR-2.6.4 plugins removed "; sleep 2
+;;
 z);;
 #
 esac;;
-#############################################################
 
+#############################################################
 5)
 clear
-dialog --title "   ** Configuring VDR   " --infobox "
-   ---------------------------------------------------------------------------------------------
+dialog --title "   ** Install Shared parts   " --infobox "
+   ----------------------------------------------------------------------------------
 
-        [a]    Installing shared parts
-        [b]    Configure Raspberry Pi 4 (Desktop & Lite 32/64 bit Bullseye )
-        [c]    Configure Raspberry Pi 3 (Lite 32 bit Bullseye)
+        [a]    Install (icons fonts channells diseqc start-scripts & others)
+
         [z]    Skip
 
-   --------------------------------------------------------------------------------------------- " 0 0
-    echo -n "        Enter your menu choice  = Install [a-c]  ~~ Skip [z]     "
+   ---------------------------------------------------------------------------------- " 0 0
+    echo -n "        Enter your menu choice  = Install [a]  ~~ Skip [z]     "
     read yourch
     case $yourch in
+
 a)
 clear
-echo "                    Shared parts"
-sleep 1
-clear
-echo "                    Installing Icons"
+echo "                    Installing Icons "
 sleep 2
 if [ -f $SRC/icone/vdr.jpg ]
 then echo "Icons $Remind4"
@@ -888,7 +887,7 @@ echo "Icons installed"
 sleep 2
 fi
 #
-echo "                    Installing Italian translation for some plugins"
+echo "                    Installing Italian translation for some plugins "
 cd $SRC
 mkdir -p traduzioni
 cd traduzioni
@@ -1013,7 +1012,7 @@ cd /etc/vdr/themes
 tar -zxvf lcars_pack.tar.gz
 cd /etc/vdr/themes
 rm -rf lcars_pack.tar.gz
-echo "                    Default Skin installed"
+echo "Default Skin installed"
 sleep 2
 fi
 #
@@ -1174,7 +1173,7 @@ cd /etc/vdr/
 cp -rf $REPO/channels.conf.camper.tar.gz /etc/vdr/
 tar -zxvf channels.conf.camper.tar.gz
 rm -rf vdr/channels.conf.camper.tar.gz
-echo "Channell MONO13_CAMPER list installed"
+echo "                    Channell MONO13_CAMPER list installed"
 sleep 2;;
 #
 z);;
@@ -1204,7 +1203,7 @@ cd $ETC
 tar -zxvf oscam.tar.gz
 rm -rf oscam.tar.gz
 fi
-# questa parte sotto è in dubbio
+#
 if [ -f /usr/local/bin/oscam ]
   then  echo "                    Oscam is already installed"
 else
@@ -1227,7 +1226,7 @@ rm -rf oscam_pcsc-32.tar.gz
 fi
 rm -rf $TEMP/release_check
 chmod 777 oscam
-echo "                    Oscam installed"
+echo "Oscam installed"
 sleep 2
 fi
 #
@@ -1299,7 +1298,7 @@ sudo /etc/init.d/oscam stop > /dev/null 2>&1
 ' >> /usr/local/bin/KillOscam.sh
 chmod 777 /usr/local/bin/KillOscam.sh
 #
-echo "                    Oscam start & stop installed"
+echo "Oscam start & stop installed"
 sleep 2
 #
 cd $REPO/
@@ -1331,7 +1330,7 @@ rm -rf /etc/sudoers.d/oscam
 touch /etc/sudoers.d/oscam
 echo "oscam ALL=(ALL) ALL" >> /etc/sudoers.d/oscam
 echo "%`logname` ALL=NOPASSWD: /etc/init.d/oscam" >> /etc/sudoers.d/oscam
-echo "                    Permissions created"
+echo "Permissions created"
 sleep 2
 #
 echo "                    Desktop Automatic start Eventlircd - Oscam"
@@ -1345,7 +1344,7 @@ update-rc.d eventlircd remove
 sleep 1
 update-rc.d eventlircd defaults
 sleep 1
-echo "                    Automatic start Eventlircd - Oscam created"
+echo "Automatic start Eventlircd - Oscam created"
 sleep 2
 #
 echo "                    Installing Vdr-Plugin-Dvbapi"
@@ -1362,10 +1361,29 @@ make LIBDVBCSA=1 install
 cd $VDRSRC
 rm -rf dvbapi
 echo "                    Vdr-Plugin-Dvbapi installed"
-sleep 2
-;;
+sleep 2;;
 #
-b)
+z) ;;
+esac;;
+#############################################################
+
+6)
+clear
+dialog --title "   ** Configuring VDR   " --infobox "
+   ---------------------------------------------------------------------------------------------
+
+        [a]    Configure Raspberry Pi 4 (Desktop & Lite 32/64 bit Bullseye )
+        [b]    Configure Raspberry Pi 3 (Lite 32 bit Bullseye)
+        [z]    Skip
+
+   --------------------------------------------------------------------------------------------- " 0 0
+    echo -n "        Enter your menu choice  = Install [a-c]  ~~ Skip [z]     "
+    read yourch
+    case $yourch in
+
+
+#
+a)
 clear
    dialog --title "   ** Configuring Raspberry Pi 4 **   " --infobox "
    --------------------------------------------------------
@@ -1629,11 +1647,11 @@ echo "                    *** Done! ***"
 sleep 2
 echo "                    *** Installation completed! ***"
 sleep 3;;
-#esac
+#
 esac;;
 z);;
 ##############################################################
-6)                                        #########################################
+7)                                        #########################################
                                           #                Exit/Stop              #
                                           #########################################
 
