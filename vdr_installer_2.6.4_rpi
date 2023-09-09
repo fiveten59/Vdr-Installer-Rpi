@@ -13,6 +13,7 @@
 clear
 REPO="/home/`logname`/Vdr_repo"
 PLUGIN_DRM="--lirc -P'dvbapi' -P'softhddevice-drm' -P'skinlcarsng' -P'iptv' -P'radio -l /etc/vdr/plugins/radio/rtextUnten-kleo2.mpg'"
+PLUGIN_GLES="--lirc -P'dvbapi' -P'softhddevice-drm-gles' -P'skinlcarsng' -P'iptv' -P'radio -l /etc/vdr/plugins/radio/rtextUnten-kleo2.mpg'"
 PLUGIN_RPIHDDEVICE="--lirc -P'dvbapi' -P'rpihddevice -o 5' -P'skinlcarsng' -P'iptv' -P'radio -l /etc/vdr/plugins/radio/rtextUnten-kleo2.mpg'"
 ETC='/usr/local/etc'
 SRC='/usr/local/src'
@@ -739,19 +740,18 @@ clear
    ---------------------------------------------------------------------------------------------
 
         [a]  Softhddevice-drm (Only Rpi4)
-        [b]  Rpihddevice (Only Rpi3)
-
-        [z]  Skip
+        [b]  Softhddevice-drm-gles (Only Rpi4)
+        [c]  Rpihddevice (Only Rpi3)
 
    ---------------------------------------------------------------------------------------------" 0 0
 
-    echo -n "        Enter your menu choice = Install [a - b] ~~ Skip [z]      "
+    echo -n "        Enter your menu choice = Install [a - c]      "
     read yourch
     case $yourch in
 #
 a)
 clear
-echo "                    Softhddevice-drm (Only Rpi4) "
+echo "                    Softhddevice-drm (Only Rpi4)"
 sleep 2
 apt-get -y install libglm-dev libxcb-screensaver0-dev libxcb-dpms0-dev 
 apt-get -y install libxcb-ewmh-dev libva-dev libx265-dev libasound2-dev
@@ -762,6 +762,20 @@ mv vdr-plugin-softhddevice-drm softhddevice-drm
 cd softhddevice-drm
 make && make install;;
 b)
+clear
+echo "                    Installing Vdr-Plugin-Sothddevice-drm-gles (Only Rpi4)"
+sleep 2
+apt-get -y install libglm-dev libxcb-screensaver0-dev libxcb-dpms0-dev 
+apt-get -y install libxcb-ewmh-dev libva-dev libx265-dev libasound2-dev
+apt-get -y install libgles2-mesa libgles2-mesa-dev libegl-mesa0
+apt-get -y install libgbm-dev libglm-dev libpng-dev
+cd $VDRSRC
+git clone https://github.com/rellla/vdr-plugin-softhddevice-drm-gles.git
+cp -rf vdr-plugin-softhddevice-drm-gles $REPO/
+mv -f vdr-plugin-softhddevice-drm-gles softhddevice-drm-gles
+cd softhddevice-drm-gles
+make && make install;;
+c)
 clear
 echo "                    Rpihddevice (Only Rpi3) "
 sleep 2
@@ -839,6 +853,7 @@ clear
 echo "                    Removing VDR-2.6.4 plugins"
 cd $VDRSRC
 rm -rf softhddevice-drm
+rm -rf softhddevice-drm-gles
 rm -rf rpihddevice
 rm -rf skinlcarsng
 rm -rf iptv
@@ -846,6 +861,7 @@ rm -rf radio
 rm -rf dvbapi
 cd $LIB
 rm -rf libvdr-softhddevice-drm.*
+rm -rf libvdr-softhddevice-drm-gles.*
 rm -rf libvdr-rpihddevice.*
 rm -rf libvdr-skinlcarsng.*
 rm -rf libvdr-iptv.*
@@ -920,7 +936,7 @@ sleep 2
 echo "                    Installing True Type fonts"
 sleep 2
 if [ -d /usr/share/fonts/truetype/vdrsymbols ];
-then echo " Fonts $Remind4"
+then echo "Fonts $Remind4"
 sleep 2
 else cp -rf $REPO/vdrsymbols.tar.gz /usr/share/fonts/truetype/
 cd /usr/share/fonts/truetype/
@@ -1012,7 +1028,7 @@ cd /etc/vdr/themes
 tar -zxvf lcars_pack.tar.gz
 cd /etc/vdr/themes
 rm -rf lcars_pack.tar.gz
-echo "Default Skin installed"
+echo "                    Default Skin installed"
 sleep 2
 fi
 #
@@ -1186,7 +1202,7 @@ cp -rf $REPO/eventlircd-remote.conf.tar.gz /etc/vdr
 cd /etc/vdr
 tar -zxvf eventlircd-remote.conf.tar.gz
 rm -rf eventlircd-remote.conf.tar.gz
-echo "Setup remote installed"
+echo "                    Setup remote installed"
 sleep 2
 #
 
@@ -1423,19 +1439,30 @@ sudo chvt 7
 # shutdown -h now' >> /usr/local/bin/vdrpoweroff
 chmod 777 /usr/local/bin/vdrpoweroff
 #
-echo "                    Configuring Softhddevice-drm"
+echo "                    Configuring Softhddevice-drm/Softhddevice-drm-gles"
 sleep 2
 cp -rf $REPO/setup16_softhddevice_drm.tar.gz /etc/vdr/
 cd /etc/vdr/
 tar -zxvf setup16_softhddevice_drm.tar.gz
 rm -rf setup16_softhddevice_drm.tar.gz
+#
+if [ -f /lib/vdr/libsofthddevice-drm.* ]
+then
 echo '#!/bin/bash
 
 chvt 1;
 sleep 2;
 /usr/bin/vdr -c /etc/vdr -E /var/vdr -l 3 -u root '$PLUGIN_DRM' -s /usr/local/bin/vdrpoweroff ' >> /usr/local/bin/vdrrun
 chmod 777 /usr/local/bin/vdrrun
+else
+echo '#!/bin/bash
+
+chvt 1;
+sleep 2;
+/usr/bin/vdr -c /etc/vdr -E /var/vdr -l 3 -u root '$PLUGIN_GLES' -s /usr/local/bin/vdrpoweroff ' >> /usr/local/bin/vdrrun
+chmod 777 /usr/local/bin/vdrrun
 echo "Vdr start & stop created"
+fi
 sleep 2
 #
 echo "                    Setup icons for Rpi 4 Desktop"
@@ -1520,22 +1547,32 @@ sleep 3;;
 #
 b)
 clear
-echo "                    Create Vdr start & stop for Rpi4 Console using Softhddevice-drm"
-sleep 2
-rm -rf /usr/local/bin/vdrrun
-touch /usr/local/bin/vdrrun
-echo "                    Configuring Softhddevice-drm"
+echo "                    Configuring Softhddevice-drm/Softhddevice-drm-gles"
 sleep 2
 cp -rf $REPO/setup16_softhddevice_drm.tar.gz /etc/vdr/
 cd /etc/vdr/
 tar -zxvf setup16_softhddevice_drm.tar.gz
-rm -rf setup16_softhddevice_drm.tar.gz 
+rm -rf setup16_softhddevice_drm.tar.gz
+#
+if [ -f /lib/vdr/libsofthddevice-drm.* ]
+then
 echo '#!/bin/bash
 
+chvt 1;
+sleep 2;
 /usr/bin/vdr -c /etc/vdr -E /var/vdr -l 3 -u root '$PLUGIN_DRM' -s /usr/local/bin/vdrpoweroff ' >> /usr/local/bin/vdrrun
 chmod 777 /usr/local/bin/vdrrun
+else
+echo '#!/bin/bash
+
+chvt 1;
+sleep 2;
+/usr/bin/vdr -c /etc/vdr -E /var/vdr -l 3 -u root '$PLUGIN_GLES' -s /usr/local/bin/vdrpoweroff ' >> /usr/local/bin/vdrrun
+chmod 777 /usr/local/bin/vdrrun
+echo "Vdr start & stop created"
+fi
+sleep 2
 #
-clear
 echo "                    Create Vdr vdrpoweroff"
 sleep 2
 rm -rf /usr/local/bin/vdrpoweroff
