@@ -178,7 +178,7 @@ S30.0W 99999 H 10600  t V W15 [E0 10 38 F3] W15 A W15 T
 #
 apt-get -y install dialog git subversion wget rpd-plym-splash dialog
 apt-get -y install checkinstall build-essential autoconf unzip
-apt-get -y install autopoint automake cmake libtool pkg-config
+apt-get -y install autopoint automake cmake libtool
 #
 sudo useradd vdr -g video -d /home/vdr -s /bin/bash -m
 mkdir $SRC/packages
@@ -238,11 +238,12 @@ dialog --title "   *****   VDR Rpi Version Installer Script - Libraries & Codec 
 	   [7]     Exit
 	 ========================================================================================= " 0 0
 
-echo -n "              Enter your menu choice = Submenu [1~6] -- Exit [7] :        "
+echo -n "              Enter your menu choice = Submenu [1~6] -- Exit [7]    "
 read yourch
 case $yourch in
 #
 1)
+cd /home/`logname`
 clear
 dialog --title "   ** Download & Upgrade Local Repository **   " --infobox "
    ---------------------------------------------------------------------------------------------
@@ -253,7 +254,7 @@ dialog --title "   ** Download & Upgrade Local Repository **   " --infobox "
 
         [z]  Skip
    ---------------------------------------------------------------------------------------------" 0 0
-echo -n "     Enter your menu choice = Install [a] ~~ Remove & Upgrade [b] ~~ Skip [z]"
+echo -n "     Enter your menu choice = Install [a] ~~ Remove & Upgrade [b] ~~ Skip [z]    "
 read yourch
 case $yourch in
 #
@@ -281,8 +282,7 @@ if [ -e $REPO/main.zip ]; then
   echo " ..... File exists ....."
 else
   echo "File not found ... Downloading it now ....."
-#    wget https://github.com/jc-kynesim/rpi-ffmpeg/archive/refs/heads/test/4.3.5/main.zip
-    git clone https://github.com/jc-kynesim/rpi-ffmpeg.git
+    wget https://github.com/jc-kynesim/rpi-ffmpeg/archive/refs/heads/test/4.3.5/main.zip
 fi
 
 echo " Downloading Vdr and Plugins on local repo"
@@ -350,8 +350,7 @@ cd Vdr_repo
 
 echo "                    Downloading Libraries"
 
-#wget wget https://github.com/jc-kynesim/rpi-ffmpeg/archive/refs/heads/test/4.3.5/main.zip
-git clone https://github.com/jc-kynesim/rpi-ffmpeg.git
+wget wget https://github.com/jc-kynesim/rpi-ffmpeg/archive/refs/heads/test/4.3.5/main.zip
 git clone https://github.com/OpenELEC/eventlircd.git
 
 echo "                    Downloading Vdr and Plugins on local repo"
@@ -399,7 +398,7 @@ dialog --title "   ** Common Libs (Ffmpeg) & Infra-Red Remotes Control (Eventlir
         [z]    Skip
 
    ----------------------------------------------------------------------------------- " 0 0
-echo -n "        Enter your menu choice  = Install [a-c] ~~ Remove [a1-b1] ~~ Skip [z]"
+echo -n "        Enter your menu choice  = Install [a-c] ~~ Remove [a1-b1] ~~ Skip [z]    "
 read yourch
 case $yourch in
 #
@@ -416,13 +415,11 @@ apt-get -y install libxcb-dpms0-dev libxcb-glx0-dev libxcb-randr0-dev libxcb-scr
 apt-get -y install libxcb-xv0-dev libxcb-image0-dev libxcb-util0-dev libxcb-icccm4-dev libxcb-keysyms1-dev
 cd $SRC/ffmpeg_sources
 sleep 2
-#cp -rf $REPO/main.zip $SRC/ffmpeg_sources/
-#unzip main.zip
-#mv -f rpi-ffmpeg-test-4.3.5-main rpi-ffmpeg
-cp -rf $REPO/rpi-ffmpeg $SRC/ffmpeg_sources/
+cp -rf $REPO/main.zip $SRC/ffmpeg_sources/
+unzip main.zip
+rm -rf main.zip
+mv -f rpi-ffmpeg-test-4.3.5-main rpi-ffmpeg
 cd rpi-ffmpeg
-#dmesg | grep -i arm64 > $TEMP/release_check
-#if cat $TEMP/release_check | grep "arm64"
 clear
 getconf LONG_BIT > $TEMP/release_check
 if cat $TEMP/release_check | grep "64"
@@ -617,7 +614,7 @@ clear
         [z]  Skip
    ---------------------------------------------------------------------------------------------" 0 0
 
-    echo -n "        Enter your menu choice = Install [a] ~~ Remove [b] ~~ Skip [z]      "
+    echo -n "        Enter your menu choice = Install [a] ~~ Remove [b] ~~ Skip [z]    "
     read yourch
     case $yourch in
 
@@ -726,7 +723,7 @@ clear
 
    ---------------------------------------------------------------------------------------------" 0 0
 
-    echo -n "        Enter your menu choice = Install [a] ~~ Remove [b] ~~ Skip [z]      "
+    echo -n "        Enter your menu choice = Install [a] ~~ Remove [b] ~~ Skip [z]    "
     read yourch
     case $yourch in
 a)
@@ -748,7 +745,7 @@ clear
 
    ------------------------------------------------------------------" 0 0
 
-    echo -n "        Enter your menu choice = Install [a - c]"
+    echo -n "        Enter your menu choice = Install [a - c]    "
     read yourch
     case $yourch in
 #
@@ -887,7 +884,7 @@ dialog --title "   ** Install Shared parts   " --infobox "
         [z]    Skip
 
    ---------------------------------------------------------------------------------- " 0 0
-    echo -n "        Enter your menu choice  = Install [a]  ~~ Skip [z]"
+    echo -n "        Enter your menu choice  = Install [a]  ~~ Skip [z]    "
     read yourch
     case $yourch in
 
@@ -1072,7 +1069,7 @@ clear
         [z]    Skip
 
    ---------------------------------------------- " 0 0
-echo -n "        Enter your menu choice = Install [a-p] ~~ Skip [z]"
+echo -n "        Enter your menu choice = Install [a-p] ~~ Skip [z]    "
 read yourch
 case $yourch in
 
@@ -1331,10 +1328,10 @@ cd /$PLUGINS/iptv/
 rm -rf vlc2iptv
 tar -zxvf iptv_conf.tar.gz
 rm -rf iptv_conf.tar.gz
-echo "Iptv configured"
+echo "                    Iptv configured"
 sleep 2
 #
-echo "                    Permissions to execute Eventlircd - Vdr - Oscam"
+echo "                    Permission to execute Eventlircd - Vdr - Oscam"
 sleep 2
 #
 rm -rf /etc/sudoers.d/eventlircd
@@ -1349,7 +1346,7 @@ rm -rf /etc/sudoers.d/oscam
 touch /etc/sudoers.d/oscam
 echo "oscam ALL=(ALL) ALL" >> /etc/sudoers.d/oscam
 echo "%`logname` ALL=NOPASSWD: /etc/init.d/oscam" >> /etc/sudoers.d/oscam
-echo "Permissions created"
+echo "                    Permissions created"
 sleep 2
 #
 echo "                    Desktop Automatic start Eventlircd - Oscam"
@@ -1363,7 +1360,7 @@ update-rc.d eventlircd remove
 sleep 2
 update-rc.d eventlircd defaults
 sleep 2
-echo "Automatic start Eventlircd - Oscam created"
+echo "                    Automatic start Eventlircd - Oscam created"
 sleep 2
 #
 echo "                    Installing Vdr-Plugin-Dvbapi"
@@ -1396,7 +1393,7 @@ dialog --title "   ** Configuring VDR   " --infobox "
         [z]    Skip
 
    -------------------------------------------------------------------------------- " 0 0
-    echo -n "        Enter your menu choice  = Install [a-c]  ~~ Skip [z]"
+    echo -n "        Enter your menu choice  = Install [a-c]  ~~ Skip [z]    "
     read yourch
     case $yourch in
 #
@@ -1410,7 +1407,7 @@ clear
         
         [z]    Skip           
    -------------------------------------------------------- " 0 0
-echo -n "        Enter your menu choice  [a-c] ~~ Skip [z]"
+echo -n "        Enter your menu choice  [a-c] ~~ Skip [z]    "
 read yourch
 case $yourch in
 #
@@ -1535,7 +1532,7 @@ Exec=/usr/local/bin/KillOscam.sh
 " >> /usr/share/applications/KillOscam.desktop
 chmod 777 /usr/share/applications/KillOscam.desktop
 #
-echo "Setup icons for Rpi 4 Desktop installed"
+echo "                    Setup icons for Rpi 4 Desktop installed"
 sleep 2
 #
 ln -s /usr/local/bin/vdrrun /home/`logname`/vdrrun
