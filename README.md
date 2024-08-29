@@ -7,7 +7,7 @@ At first install Raspberry Pi OS  (script tested with Debian Bookworm)
 
 After installation update the system (sudo apt update && sudo apt full-upgrade)
 and configure through Raspi-config (sudo raspi-config)
-- System Options - Set Wireless LAN (optional) - Set Boot on Console autologin)
+- System Options - Set Wireless LAN (optional) - Set Boot on Console autologin wit Lite OS)
 - Interface Options (optional but I suggest enable SSH for check and work from remote)
 - 
 - Localisation Options (Set 1,2 & 4  item - for the language L1 use yourlanguage-UTF8)
