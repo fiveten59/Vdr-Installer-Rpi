@@ -36,35 +36,18 @@ Trick: at point 1 type 'First install libraries' just only now
  1 creates a new folder downloading progs & libraries needed by Vdr 
  2 install some DVB firmware FFMPEG e Eventlircd
  3 install Vdr
- 4 install Vdr  Basic plugins (Rpihddevice(for rpi3)/Softhddevice-drm-gles - Skinflatplus - Iptv - Radio - Dvbapi - Vnsiserver)
+ 4 install Vdr  Basic plugins Softhddevice-drm-gles - Skinflatplus - Iptv - Radio - Dvbapi - Vnsiserver)
 
  5 configure all the Vdr system (remember when requested type b) Console)
 Select a) installing shared parts 
-Select c) installing Vdr on console On Raspberry Pi3
+
+ 6 Final install
+Select a) installing Vdr on consolle
+Select b) installing Vdr on Desktop
 
 Reboot
 
-b) Raspberry Pi4 OS Lite (32 or 64 bit)
-
-Same as above for the first part
-At point 5 of the script
-Select a) Install shared parts
-Select b) Configure Raspberry Pi 4 (Bullseye Desktop & Lite 32/64 bit Bullseye )
-then b) Rpi4 Console (Bullseye Lite version 32/64 bit)
-
-c) Raspberry Pi4 OS Desktop (32 or 64 bit)
-
-Same as above for the first part
-At point 5 of the script
-Select a) Install shared parts
-Select b) Configure Raspberry Pi 4 (Bullseye Desktop & Lite 32/64 bit Bullseye )
-then a) Rpi4 Desktop (Bullseye Desktop version 32/64 bit)
-
-Vdr automatically starts on all the three version after booting 
-and (console version) shutdown after poweroff of your remote
-while on desktop version shut Vdr e display the usual Bullseye screen  
-
-# Tips & Tricks
+Tips & Tricks
 
 Using a simple USB Audio Device [f.e. USB PnP Sound Device] from a remote terminal check
 aplay -l and control where is your Usb - In my case I have
@@ -82,5 +65,5 @@ Using a solid sound device like hifiberry or similar add to
 sudo nano /boot/config.txt
 dtoverlay=hifiberry-dac 
 
-- The "dark" is in /usr/local/etc
+- Libraries are in /lib/vdr folder
 - You can put your channells as usual in /etc/vdr
