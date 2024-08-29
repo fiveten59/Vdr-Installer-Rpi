@@ -1,13 +1,11 @@
-# Simple script for installing Vdr on Raspberry Pi4 & Pi3
+# Simple script for installing Vdr on Raspberry Pi4
 
 Os: 
-Bullseye Lite 32 bit for Rpi3
-Bullseye Lite or Desktop 32/64 bit for Rpi4 
+Bookworm Lite or Desktop 64 bit for Rpi4 
 
-a) Raspberry Pi3 OS Lite (only 32bit)
+a) Raspberry Pi4 OS Lite / Desktop
 
 At first install Raspberry Pi OS Lite (script tested with Debian Bullseye)
-https://downloads.raspberrypi.org/raspios_lite_armhf/images/raspios_lite_armhf-2023-02-22/2023-02-21-raspios-bullseye-armhf-lite.img.xz
 
 After installation update the system (sudo apt update && sudo apt full-upgrade)
 and configure through Raspi-config (sudo raspi-config)
@@ -23,14 +21,14 @@ Now we install the script
 
 cd new folder
 download the file
-wget https://www.dropbox.com/s/ukepxg7o75w1g39/vdr_installer_2.6.4_rpi
-or copy/paste in this folder the script vdr_installer_2.6.4_rpi via Usb or SSH (ifconfig gives your IP address) or via Lan using Filezilla
 
-chmod 755 vdr_installer_2.6.4_rpi
+or copy/paste in this folder the script vdr_installer_2.6.X_rpi4 via Usb or SSH (ifconfig gives your IP address) or via Lan using Filezilla
+
+chmod 755 vdr_installer_2.6.X_rpi4
 
 now we open the file
 sudo su
-./vdr_installer_2.6.4_rpi 
+./vdr_installer_2.6.X_rpi4 
 
 And follow the script  ...
 Trick: at point 1 type 'First install libraries' just only now
@@ -38,8 +36,8 @@ Trick: at point 1 type 'First install libraries' just only now
  1 creates a new folder downloading progs & libraries needed by Vdr 
  2 install some DVB firmware FFMPEG e Eventlircd
  3 install Vdr
- 4 install Vdr  Basic plugins (Rpihddevice(for rpi3)/Softhddevice-drm(for Rpi4) - Text2Skin-NarrowHd - Iptv - Radio - Dvbapi)
-On Raspberry Pi3 choice Rpihddevice!!!!
+ 4 install Vdr  Basic plugins (Rpihddevice(for rpi3)/Softhddevice-drm-gles - Skinflatplus - Iptv - Radio - Dvbapi - Vnsiserver)
+
  5 configure all the Vdr system (remember when requested type b) Console)
 Select a) installing shared parts 
 Select c) installing Vdr on console On Raspberry Pi3
