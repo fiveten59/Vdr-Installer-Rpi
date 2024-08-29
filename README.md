@@ -3,9 +3,7 @@
 Os: 
 Bookworm Lite or Desktop 64 bit for Rpi4 
 
-a) Raspberry Pi4 OS Lite / Desktop
-
-At first install Raspberry Pi OS Lite (script tested with Debian Bullseye)
+At first install Raspberry Pi OS  (script tested with Debian Bookworm)
 
 After installation update the system (sudo apt update && sudo apt full-upgrade)
 and configure through Raspi-config (sudo raspi-config)
