@@ -9,7 +9,7 @@
 #
 clear
 REPO="/home/`logname`/Vdr_repo"
-PLUGIN="--lirc -P'dvbapi' -P'softhddevice-drm-gles -d 1920x1080@50' -P'skinflatplus -l /etc/vdr/logos/' -P'iptv'"
+PLUGIN="--lirc -P'dvbapi' -P'softhddevice-drm-gles -d 1920x1080@50' -P'skinflatplus -l /etc/vdr/logos/' -P'iptv -y /usr/local/bin/yt-dlp'"
 BIN="/usr/local/bin"
 ETC='/usr/local/etc'
 SRC='/usr/local/src'
@@ -933,7 +933,14 @@ chmod -R 777 *
 #
 echo "                    Configuring Iptv"
 sleep 2
+
 sed -i 's/geteuid/getppid/' /usr/bin/vlc
+if [ -f /usr/local/bin/yt-dlp ]
+then echo "yt-dlp $Remind3"
+else
+wget -qO /usr/local/bin/yt-dlp https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp
+chmod a+rx /usr/local/bin/yt-dlp
+fi
 if [ -f /$PLUGINS/iptv/channels/Y100.conf ]
 then echo "Iptv $Remind3"
 else
