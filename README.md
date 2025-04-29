@@ -1,7 +1,7 @@
-# Simple script for installing Vdr on Raspberry Pi4
+# Simple script for installing Vdr on Raspberry Pi4 - Pi5
 
 Os: 
-Bookworm Lite or Desktop 64 bit for Rpi4 
+Bookworm Lite or Desktop 64 bit for Rpi4 - Rpi5
 
 At first install Raspberry Pi OS  (script tested with Debian Bookworm)
 
@@ -22,11 +22,11 @@ download the file
 
 or copy/paste in this folder the script vdr_installer_2.6.X_rpi4 via Usb or SSH (ifconfig gives your IP address) or via Lan using Filezilla
 
-chmod 755 vdr_installer_2.6.X_rpi4
+chmod 755 vdr_installer_2.7.5_rpi
 
 now we open the file
 sudo su
-./vdr_installer_2.6.X_rpi4 
+./vdr_installer_2.7.5_rpi
 
 And follow the script  ...
 Trick: at point 1 type 'First install libraries' just only now
@@ -63,5 +63,5 @@ Using a solid sound device like hifiberry or similar add to
 sudo nano /boot/config.txt
 dtoverlay=hifiberry-dac 
 
-- Libraries are in /lib/vdr folder
+- Libraries are in /usr/local/lib/vdr folder
 - You can put your channells as usual in /etc/vdr
