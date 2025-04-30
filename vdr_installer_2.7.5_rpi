@@ -362,7 +362,7 @@ mv rpi-ffmpeg-test-4.3.5-main rpi-ffmpeg
 rm -rf main.zip
 cd rpi-ffmpeg
 sleep 2
-#patch -p1 < ffmpeg-001-rpi.patch
+patch -p1 < ffmpeg-001-v4l2-request.patch
 sleep 2
 ./configure --extra-libs="-ldl" --arch=arm64  --enable-sand --enable-v4l2_m2m --enable-v4l2-request --enable-v4l2-request --enable-vout-drm --enable-libudev --disable-rpi --enable-libdrm --enable-libx265 --enable-libx264 --enable-gpl --enable-pic --enable-avfilter --enable-nonfree --enable-gpl --enable-iconv --enable-network --enable-pthreads --disable-vdpau --disable-vaapi --enable-version3 --enable-shared
 echo "                    Press Enter to continue ..."
