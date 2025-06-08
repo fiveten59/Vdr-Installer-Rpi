@@ -952,7 +952,7 @@ if [ -f /var/lib/vdr/plugins/iptv/channels/Y100.conf ]
 then echo "Iptv $Remind3"
 else
 cd /var/lib/vdr/plugins
-cp -rf $REPO/iptv_conf.tar.gz /var/lib/vdr/plugins
+cp -rf $REPO/iptv_conf.tar.gz /var/lib/vdr/plugins/iptv
 tar -zxvf iptv_conf.tar.gz
 rm -rf iptv_conf.tar.gz
 cd iptv/channels
@@ -969,7 +969,7 @@ fi
 clear
 echo "                    Configuring Vnsiserver"
 sleep 1
-cp -rf $VDRSRC/vnsiserver/vnsiserver/allowed_hosts.conf /$VDRCONF/plugins/iptv
+cp -rf $VDRSRC/vnsiserver/vnsiserver/allowed_hosts.conf /$VDRCONF/plugins/
 
 echo "Vnsiserver configured"; sleep 1
 
