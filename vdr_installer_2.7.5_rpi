@@ -2,27 +2,34 @@
 ################################## !!! README !!! #######################################
 # Script name: vdr_installer_2.7.5_rpi
 # Version: Git Repository Master (https://github.com/fiveten59/Vdr_installer-Rpi)
-# Tested on Raspberry Pi4-5 - Os: Bookworm Desktop & Lite 64 bit
+# Tested on Raspberry Pi 4-5 - Os: Bookworm Desktop & Lite 64 bit
 # chmod the script
 # then load it simply typing: sudo ./vdr_installer_2.7.5_rpi
 #########################################################################################
 #
 clear
 REPO="/home/`logname`/Vdr_repo"
-PLUGIN_DESKTOP="--lirc -P'dvbapi' -P'softhddevice-drm-gles -a hw:CARD=sndrpihifiberry,0 -d 1920x1080@50' -P'skinflatplus -l /var/lib/vdr/logos/' -P'iptv -y /usr/local/bin/yt-dlp'"
-PLUGIN_LITE="--lirc -P'dvbapi' -P'softhddevice-drm-gles -d 1920x1080@50' -P'skinflatplus -l /var/lib/vdr/logos/' -P'iptv -y /usr/local/bin/yt-dlp'"
+PLUGIN_DESKTOP="--lirc -P'dvbapi' -P'softhddevice-drm-gles -d 1920x1080@50' -P'skinflatplus -l /var/lib/vdr/logos/' -P'iptv -y /usr/local/bin/yt-dlp' -P'radio'
+
+# -a hw:CARD=sndrpihifiberry,0 
+# -a hw:CARD=BossDAC,0 
+"
+PLUGIN_LITE="--lirc -P'dvbapi' -P'softhddevice-drm-gles -d 1920x1080@50' -P'skinflatplus -l /var/lib/vdr/logos/' -P'iptv -y /usr/local/bin/yt-dlp' -P'radio'
+
+# -a hw:CARD=sndrpihifiberry,0 
+# # -a hw:CARD=BossDAC,0 
+"
 BIN="/usr/local/bin"
 SRC='/usr/local/src'
 VDRSRC=''$SRC'/vdr/PLUGINS/src'
 LIBCONF='/usr/local/lib/vdr'
 VDRCONF='/var/lib/vdr'
 VDR='vdr-2.7.5'
-TEMP='/tmp'
 SHARE='/usr/local/share/vdr/plugins'
 FONTS='/usr/share/fonts'
 Remind3='is already installed'
 Remind4='are already installed'
-Remind5='is not installed'
+Remind5='is already configured'
 #               Disecq
 TRIAL="
 # Full DiSEqC sequence:
@@ -154,6 +161,7 @@ else
    unzip main.zip; rm -rf main.zip; mv -f Vdr_repo-main Vdr_repo
 fi
 
+ 
 cd Vdr_repo
 
 echo "Downloading Vdr and Plugins on local folder"
@@ -204,6 +212,13 @@ if [ -e $REPO/vdr-plugin-vnsiserver ]; then
 else
   echo "File not found ... Downloading it now ....."  
    git clone https://github.com/vdr-projects/vdr-plugin-vnsiserver.git
+  fi
+  
+if [ -e $REPO/vdr-plugin-radio ]; then
+  echo " ..... File exists ..... "
+else
+  echo "File not found ... Downloading it now ....."  
+   git clone https://github.com/siricco/vdr-plugin-radio.git
   fi
   
 echo "Downloading others"
@@ -258,6 +273,7 @@ git clone https://github.com/manio/vdr-plugin-dvbapi.git
 git clone https://github.com/Zabrimus/vdr-plugin-iptv.git
 git clone https://github.com/vdr-projects/vdr-plugin-vnsiserver.git
 #git clone https://github.com/rofafor/vdr-plugin-iptv.git
+git clone https://github.com/siricco/vdr-plugin-radio.git
 
 echo "                    Downloading skins"
 
@@ -308,7 +324,7 @@ echo "                    Configuring Raspberry Pi 4/5 - Config Boot Bookworm De
 sleep 1
 echo "dtoverlay=disable-bt" >> /boot/firmware/config.txt
 echo "dtoverlay=hifiberry-dac" >> /boot/firmware/config.txt
-#sed -i 's|dtparam=audio=on|# dtparam=audio=on|' /boot/firmware/config.txt
+sed -i 's|dtparam=audio=on|# dtparam=audio=on|' /boot/firmware/config.txt
 sed -i 's|camera_auto_detect=1|# camera_auto_detect=1|' /boot/firmware/config.txt
 sed -i 's|dtoverlay=vc4-kms-v3d|dtoverlay=vc4-kms-v3d,cma-256|' /boot/firmware/config.txt
 
@@ -634,7 +650,7 @@ a)
 clear
 cd $SRC
 mkdir -p /etc/vdr/plugins
-mkdir -p /var/lib/vdr/themes
+mkdir -p $VDRCONF/themes
 rm -rf /media/video
 mkdir /media/video
 chmod 755 /media/video
@@ -711,8 +727,23 @@ mv -f vdr-plugin-vnsiserver vnsiserver
 cd vnsiserver
 make && make install
 echo "
-                    Vdr-Plugin-Iptv Vnsiserver"; sleep 1
+                    Vdr-Plugin-Vnsiserver"; sleep 1
 #
+#
+echo "
+                    Installing Vdr-Plugin-Radio"
+sleep 1
+cd $VDRSRC
+cp -rf $REPO/vdr-plugin-radio /$VDRSRC
+mv -f vdr-plugin-radio radio
+cd radio
+cp -rf $REPO/patch_radio.tar.gz $VDRSRC/radio
+tar -zxvf patch_radio.tar.gz
+patch -p1 < fix_radio.patch
+rm -rf patch_radio.tar.gz
+make && make install
+echo "
+                    Vdr-Plugin-Radio"; sleep 1
 echo "
                     Installing Vdr-Plugin-Dvbapi"
 sleep 1
@@ -742,6 +773,7 @@ rm -rf skinflatplus
 rm -rf iptv
 rm -rf vnsiserver
 rm -rf dvbapi
+rm -rf radio
 cd $LIBCONF
 rm -rf skinflatplus
 rm -rf libvdr-softhddevice-drm-gles.*
@@ -749,9 +781,11 @@ rm -rf libvdr-skinflatplus.*
 rm -rf libvdr-iptv.*
 rm -rf libvdr-vnsiserver.*
 rm -rf libvdr-dvbapi.*
+rm -rf libvdr-radio.*
 cd $VDRCONF/plugins
 rm -rf skinflatplus
 rm -rf iptv
+rm-rf radio
 cd $SHARE
 rm -rf skinflatplus
 cd $FONTS
@@ -811,15 +845,15 @@ echo "Translations installed"; sleep 1
 fi
 #
 echo "                    keymacros.conf setup"
-rm -rf /var/lib/vdr/keymacros.conf
-touch /var/lib/vdr/keymacros.conf
+rm -rf  $VDRCONF/keymacros.conf
+touch  $VDRCONF/keymacros.conf
 echo "# Remote control key macros for VDR
 
 Red       Recordings
 Green     @channelscan
 Yellow    Info
 Blue      @tvguide
-Ok        Channels" >> /var/lib/vdr/keymacros.conf
+Ok        Channels" >> $VDRCONF/keymacros.conf
 echo "keymacros installed"; sleep 1
 #
 echo "                    Installing True Type Fonts"
@@ -838,16 +872,16 @@ fi
 #
 echo "                    Install Channels logos"
 sleep 1
-if [ -f /var/lib/vdr/logos/2be.png ]
+if [ -f $VDRCONF/logos/2be.png ]
 then echo "Logos are already installed"
 else
-cp -rf $REPO/logos /var/lib/vdr/
+cp -rf $REPO/logos $VDRCONF
 echo "Channels logos installed"; sleep 1
 fi
 #
 echo "                    Channels setup"
 sleep 1
-cd /var/lib/vdr/
+cd $VDRCONF
 rm -rf channels.conf
 clear
 dialog --title "   ** Channells list **   " --infobox "
@@ -865,7 +899,7 @@ read yourch
 case $yourch in
 a) 
 clear
-cp -rf $REPO/channels.conf.mono_hotbird.tar.gz /var/lib/vdr/
+cp -rf $REPO/channels.conf.mono_hotbird.tar.gz $VDRCONF
 tar -zxvf channels.conf.mono_hotbird.tar.gz
 rm -rf channels.conf.mono_hotbird.tar.gz
 echo "                    Channell MONO13 list installed"
@@ -873,7 +907,7 @@ sleep 1;;
 #
 b)
 clear
-cp -rf $REPO/channels.conf.dual.tar.gz /var/lib/vdr/
+cp -rf $REPO/channels.conf.dual.tar.gz $VDRCONF
 tar -zxvf channels.conf.dual.tar.gz
 rm -rf channels.conf.dual.tar.gz
 echo "                    Channell DUAL list installed"
@@ -881,7 +915,7 @@ sleep 1;;
 #
 c)
 clear
-cp -rf $REPO/channels.conf.trial.tar.gz /var/lib/vdr/
+cp -rf $REPO/channels.conf.trial.tar.gz $VDRCONF
 tar -zxvf channels.conf.trial.tar.gz
 rm -rf channels.conf.trial.tar.gz
 echo "                    Channell TRIAL list installed"
@@ -889,7 +923,7 @@ sleep 1;;
 #
 d)
 clear
-cp -rf $REPO/channels-w_scan2-Astra_19.conf.tar.gz /var/lib/vdr/
+cp -rf $REPO/channels-w_scan2-Astra_19.conf.tar.gz $VDRCONF
 tar -zxvf channels-w_scan2-Astra_19.conf.tar.gz
 rm -rf channels-w_scan2-Astra_19.conf.tar.gz
 echo "                    Channell MONO19 list installed"
@@ -897,7 +931,7 @@ sleep 1;;
 #
 e)
 clear
-cp -rf $REPO/Kodi_Frontend_channels.tar.gz /var/lib/vdr/
+cp -rf $REPO/Kodi_Frontend_channels.tar.gz $VDRCONF
 tar -zxvf Kodi_Frontend_channels.tar.gz
 rm -rf Kodi_Frontend_channels.tar.gz
 echo "                    Kodi Frontend channels list installed"
@@ -923,36 +957,35 @@ case $yourch in
 #
 1) 
 clear
-echo "$MONO13" >> /var/lib/vdr/diseqc.conf
+echo "$MONO13" >> $VDRCONF/diseqc.conf
 echo "                    Hotbird Diseqc installed"
 sleep 1;;
 2)
 clear
-echo "$DUAL" >> /var/lib/vdr/diseqc.conf
+echo "$DUAL" >>  $VDRCONF/diseqc.conf
 echo "                    Dual Diseqc installed"
 sleep 1;;
 3)
 clear
-echo "$TRIAL" >> /var/lib/vdr/diseqc.conf
+echo "$TRIAL" >>  $VDRCONF/diseqc.conf
 echo "                    Trial Diseqc installed"
 sleep 1;;
 4)
 clear
-echo "$MONO19" >> /var/lib/vdr/diseqc.conf
+echo "$MONO19" >>  $VDRCONF/diseqc.conf
 echo "                    Astra Diseqc installed"
 sleep 1;;
 z);;
 esac
 #
-clear
 echo "                    Configuring Iptv"
 sleep 1
 sed -i 's/geteuid/getppid/' /usr/bin/vlc
-if [ -f /var/lib/vdr/plugins/iptv/channels/Y100.conf ]
-then echo "Iptv $Remind3"
+if [ -f  $VDRCONF/plugins/iptv/channels/Y100.conf ]
+then echo "Iptv already configured"; sleep 1
 else
-cd /var/lib/vdr/plugins
-cp -rf $REPO/iptv_conf.tar.gz /var/lib/vdr/plugins/iptv
+cp -rf $REPO/iptv_conf.tar.gz $VDRCONF/plugins/iptv
+cd  $VDRCONF/plugins/iptv
 tar -zxvf iptv_conf.tar.gz
 rm -rf iptv_conf.tar.gz
 cd iptv/channels
@@ -960,26 +993,45 @@ sudo chmod 777 *
 fi
 if [ -f /$BIN/yt-dlp ]
 then echo "yt-dlp $Remind3"
+sleep 1
 else
 cp -rf $REPO/yt-dlp /$BIN
 chmod 755 /$BIN/yt-dlp
 echo "Iptv configured"; sleep 1
 fi
 #
-clear
+
 echo "                    Configuring Vnsiserver"
 sleep 1
+if [ -f  $VDRCONF/plugins/allowed_hosts.conf ]
+then echo "Vnsiserver already configured"
+sleep 1
+else
 cp -rf $VDRSRC/vnsiserver/vnsiserver/allowed_hosts.conf /$VDRCONF/plugins/
-
 echo "Vnsiserver configured"; sleep 1
-
+fi
+#
+echo "                    Configuring Radio"
+sleep 1
+if [ -f  $VDRCONF/plugins/radio/radioinfo-0-256 ]
+then echo "Radio already configured"
+else
+cd $VDRCONF/plugins
+mkdir -p radio
+cd radio
+cp -rf $VDRSRC/radio/config/mpegstill/* $VDRCONF/plugins/radio/
+cp -rf $REPO/radio_scripts.tar.gz $VDRCONF/plugins/radio/
+tar -zxvf radio_scripts.tar.gz
+rm -rf radio_scripts.tar.gz
+echo "Radio configured"; sleep 1
+fi
 #
 echo "                    Install default Skin for Vdr"
 sleep 1
-if [ -f /var/lib/vdr/themes/checklcars ]
+if [ -f  $VDRCONF/themes/checklcars ]
 then echo "Default Skin is already installed"
-else cp -rf $REPO/lcars_pack.tar.gz /var/lib/vdr/themes
-cd /var/lib/vdr/themes
+else cp -rf $REPO/lcars_pack.tar.gz cd  $VDRCONF/themes
+cd  $VDRCONF/themes
 tar -zxvf lcars_pack.tar.gz
 rm -rf lcars_pack.tar.gz
 echo "Default Skin installed"
@@ -1176,7 +1228,7 @@ esac
 sleep 1
 echo "                    Installing Commands"
 sleep 1
-cd /var/lib/vdr
+cd  $VDRCONF
 rm -rf commands.conf 
 touch commands.conf
 echo 'Kill Vdr: /etc/init.d/vdr stop > /dev/null 2>&1
@@ -1214,7 +1266,7 @@ touch $BIN/vdrrun
 echo '#!/bin/bash
 # file name vdrrun
 
-/usr/local/bin/vdr -l 3 --no-kbd -u root '$PLUGIN_LITE' -s /usr/local/bin/systempoweroff' >> $BIN/vdrrun
+/usr/local/bin/vdr --no-kbd -u root '$PLUGIN_LITE' -s /usr/local/bin/systempoweroff' >> $BIN/vdrrun
 chmod 777 $BIN/vdrrun
 #
 echo "                    Create Vdr Vdrpoweroff"
@@ -1254,7 +1306,7 @@ sleep 1
 sleep 1
 echo "                    Installing Commands"
 sleep 1
-cd /var/lib/vdr
+cd $VDRCONF
 rm -rf commands.conf 
 touch commands.conf
 echo 'Kill Vdr: /etc/init.d/vdr stop > /dev/null 2>&1
