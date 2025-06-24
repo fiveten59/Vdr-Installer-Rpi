@@ -1,30 +1,22 @@
 #!/bin/bash
 ################################## !!! README !!! #######################################
-# Script name: vdr_installer_2.7.5_rpi
+# Script name: vdr_installer_2.7.6_rpi
 # Version: Git Repository Master (https://github.com/fiveten59/Vdr_installer-Rpi)
 # Tested on Raspberry Pi 4-5 - Os: Bookworm Desktop & Lite 64 bit
 # chmod the script
-# then load it simply typing: sudo ./vdr_installer_2.7.5_rpi
+# then load it simply typing: sudo ./vdr_installer_2.7.6_rpi
 #########################################################################################
 #
 clear
 REPO="/home/`logname`/Vdr_repo"
-PLUGIN_DESKTOP="--lirc -P'dvbapi' -P'softhddevice-drm-gles -d 1920x1080@50' -P'skinflatplus -l /var/lib/vdr/logos/' -P'iptv -y /usr/local/bin/yt-dlp' -P'radio'
-
-# -a hw:CARD=sndrpihifiberry,0 
-# -a hw:CARD=BossDAC,0 
-"
-PLUGIN_LITE="--lirc -P'dvbapi' -P'softhddevice-drm-gles -d 1920x1080@50' -P'skinflatplus -l /var/lib/vdr/logos/' -P'iptv -y /usr/local/bin/yt-dlp' -P'radio'
-
-# -a hw:CARD=sndrpihifiberry,0 
-# # -a hw:CARD=BossDAC,0 
-"
+PLUGIN_DESKTOP="--lirc -P'dvbapi' -P'softhddevice-drm-gles -d 1920x1080@50' -P'skinflatplus -l /var/lib/vdr/logos/' -P'iptv -y /usr/local/bin/yt-dlp' -P'radio'"
+PLUGIN_LITE="--lirc -P'dvbapi' -P'softhddevice-drm-gles -d 1920x1080@50' -P'skinflatplus -l /var/lib/vdr/logos/' -P'iptv -y /usr/local/bin/yt-dlp' -P'radio'"
 BIN="/usr/local/bin"
 SRC='/usr/local/src'
 VDRSRC=''$SRC'/vdr/PLUGINS/src'
 LIBCONF='/usr/local/lib/vdr'
 VDRCONF='/var/lib/vdr'
-VDR='vdr-2.7.5'
+VDR='vdr-2.7.6'
 SHARE='/usr/local/share/vdr/plugins'
 FONTS='/usr/share/fonts'
 Remind3='is already installed'
@@ -86,15 +78,15 @@ apt -y install autopoint automake cmake libtool unzip
 mkdir -p $SRC/ffmpeg_sources
 mkdir -p /home/`logname`/.config/autostart
 #
-dialog --title " VDR 2.7.5 Installer Raspberry Pi 4-5" --infobox "
+dialog --title " VDR 2.7.6 Installer Raspberry Pi 4-5" --infobox "
 
     A special thanks goes to Klaus Schmidinger Vdr Developer
 
-    Script name: vdr_installer_2.7.5_rpi
-    Version: 2.7.5
+    Script name: vdr_installer_2.7.6_rpi
+    Version: 2.7.6
     Tested on Raspberry Pi 4-5 - Os: Bookworm Desktop & Lite version 64 bit
-    chmod 755 the script 'vdr_installer_2.7.5_rpi'
-    then load it simply typing: sudo ./vdr_installer_2.7.5_rpi" 0 0
+    chmod 755 the script 'vdr_installer_2.7.6_rpi'
+    then load it simply typing: sudo ./vdr_installer_2.7.6_rpi" 0 0
 
 echo "                    Press Enter to continue ..."
 sleep 1
@@ -105,7 +97,7 @@ while :
 do
 clear
 echo ""
-dialog --title "   *****   VDR 2.7.5 Rpi Installer   *****   " --infobox "
+dialog --title "   *****   VDR 2.7.6 Rpi Installer   *****   " --infobox "
 
 	   ============================================================================
            [1]	Download & Upgrade Local Repository
@@ -161,17 +153,16 @@ else
    unzip main.zip; rm -rf main.zip; mv -f Vdr_repo-main Vdr_repo
 fi
 
- 
 cd Vdr_repo
 
 echo "Downloading Vdr and Plugins on local folder"
 sleep 1
 
-if [ -e $REPO/vdr-2.7.5 ]; then
+if [ -e $REPO/vdr-2.7.6 ]; then
   echo " ..... File exists ..... "
 else
   echo "File not found ... Downloading it now ....."
-    git clone --branch stable/latest git://git.tvdr.de/vdr.git vdr-2.7.5
+    git clone --branch stable/latest git://git.tvdr.de/vdr.git vdr-2.7.6
   fi
 
 if [ -e $REPO/vdr-plugin-softhddevice-drm-gles ]; then
@@ -193,7 +184,6 @@ if [ -e $REPO/vdr-plugin-iptv ]; then
 else
   echo "File not found ... Downloading it now ....."
     git clone https://github.com/Zabrimus/vdr-plugin-iptv.git
-    #git clone https://github.com/rofafor/vdr-plugin-iptv.git
 fi
 
 #
@@ -267,12 +257,11 @@ cd Vdr_repo
 
 echo "                    Downloading Vdr and Plugins on local repo"
 
-git clone --branch stable/latest git://git.tvdr.de/vdr.git vdr-2.7.5
+git clone --branch stable/latest git://git.tvdr.de/vdr.git vdr-2.7.6
 git clone https://github.com/rellla/vdr-plugin-softhddevice-drm-gles.git
 git clone https://github.com/manio/vdr-plugin-dvbapi.git
 git clone https://github.com/Zabrimus/vdr-plugin-iptv.git
 git clone https://github.com/vdr-projects/vdr-plugin-vnsiserver.git
-#git clone https://github.com/rofafor/vdr-plugin-iptv.git
 git clone https://github.com/siricco/vdr-plugin-radio.git
 
 echo "                    Downloading skins"
@@ -537,10 +526,10 @@ done;;
 #
 3)
 clear
-dialog --title "   ** Install/Remove VDR-2.7.5   **   " --infobox "
+dialog --title "   ** Install/Remove VDR-2.7.6   **   " --infobox "
 
    ---------------------------------------------------------------
-        [a]  Install VDR-2.7.5
+        [a]  Install VDR-2.7.6
         [b]  Remove VDR-2.*.*
 
         [z]  Skip
@@ -559,27 +548,27 @@ apt -y install libfontconfig1-dev libfribidi-dev gettext
 apt -y install libncurses5-dev libncursesw5-dev
 #
 cd $SRC
-cp -rf $REPO/vdr-2.7.5 $SRC
+cp -rf $REPO/vdr-2.7.6 $SRC
 ln -s $VDR vdr
 #
 echo "Patching VDR"
 sleep 1
 cd vdr
-cp -rf $REPO/vdr-patches.2.7.5.tar.gz $SRC/vdr/
-tar -zxvf vdr-patches.2.7.5.tar.gz
-rm -rf vdr-patches.2.7.5.tar.gz
+cp -rf $REPO/vdr-patches.2.7.6.tar.gz $SRC/vdr/
+tar -zxvf vdr-patches.2.7.6.tar.gz
+rm -rf vdr-patches.2.7.6.tar.gz
 sleep 1
 #
 echo "                    Patching channellscan"
 patch -p1 < vdr-dvbchan.patch
 echo "                    Patching zapcockpit"
-patch -p1 < vdr-2.7.5-zapcockpit.patch
+patch -p1 < zapcockpit.patch
 echo "                    Patching svdrphosts"
 patch -p1 < vdr_svdrphosts.patch
-echo "                    Fix plugins"
-patch -p1 < vdr-2.7.5_fix_plugins.patch
-echo "                    PUndelete patch"
-patch -p1 < vdr-2.7.5-undelete.patch
+echo "                    Fix vnsiserver"
+patch -p0 < fix_vnsiserver.patch
+echo "                    Undelete patch"
+patch -p1 < undelete.patch
 
 #
 make && make install
@@ -589,7 +578,7 @@ sleep 1
 #
 apt-mark hold vdr
 sleep 2
-echo "                    VDR-2.7.5 installed"; sleep 1;;
+echo "                    VDR-2.7.6 installed"; sleep 1;;
 #
 b)
 clear
@@ -743,7 +732,8 @@ patch -p1 < fix_radio.patch
 rm -rf patch_radio.tar.gz
 make && make install
 echo "
-                    Vdr-Plugin-Radio"; sleep 1
+                    Vdr-Plugin-Radio installed"; sleep 1
+#
 echo "
                     Installing Vdr-Plugin-Dvbapi"
 sleep 1
@@ -757,7 +747,8 @@ make LIBDVBCSA=1 install
 echo "
                     Vdr-Plugin-Dvbapi installed"; sleep 1
 #
-echo "                    VDR-2.7.5 plugins installed"; sleep 1
+echo "                    
+                    VDR-2.7.6 plugins installed"; sleep 1
 echo "
 ============================================================================================================
 For more Vdr plugins pls visit https://github.com/fiveten59/Vdr_installer and download Vdr_plugins_installer
@@ -771,21 +762,21 @@ cd $VDRSRC
 rm -rf softhddevicedrmgles
 rm -rf skinflatplus
 rm -rf iptv
+rm -rf radio
 rm -rf vnsiserver
 rm -rf dvbapi
-rm -rf radio
 cd $LIBCONF
-rm -rf skinflatplus
+rm -rf libvdr-skinflatplus.*
 rm -rf libvdr-softhddevice-drm-gles.*
 rm -rf libvdr-skinflatplus.*
 rm -rf libvdr-iptv.*
+rm -rf libvdr-radio.*
 rm -rf libvdr-vnsiserver.*
 rm -rf libvdr-dvbapi.*
-rm -rf libvdr-radio.*
 cd $VDRCONF/plugins
 rm -rf skinflatplus
 rm -rf iptv
-rm-rf radio
+rm -rf radio
 cd $SHARE
 rm -rf skinflatplus
 cd $FONTS
@@ -988,7 +979,7 @@ cp -rf $REPO/iptv_conf.tar.gz $VDRCONF/plugins/iptv
 cd  $VDRCONF/plugins/iptv
 tar -zxvf iptv_conf.tar.gz
 rm -rf iptv_conf.tar.gz
-cd iptv/channels
+cd channels
 sudo chmod 777 *
 fi
 if [ -f /$BIN/yt-dlp ]
@@ -1000,7 +991,6 @@ chmod 755 /$BIN/yt-dlp
 echo "Iptv configured"; sleep 1
 fi
 #
-
 echo "                    Configuring Vnsiserver"
 sleep 1
 if [ -f  $VDRCONF/plugins/allowed_hosts.conf ]
@@ -1030,7 +1020,7 @@ echo "                    Install default Skin for Vdr"
 sleep 1
 if [ -f  $VDRCONF/themes/checklcars ]
 then echo "Default Skin is already installed"
-else cp -rf $REPO/lcars_pack.tar.gz cd  $VDRCONF/themes
+else cp -rf $REPO/lcars_pack.tar.gz $VDRCONF/themes
 cd  $VDRCONF/themes
 tar -zxvf lcars_pack.tar.gz
 rm -rf lcars_pack.tar.gz
@@ -1135,7 +1125,10 @@ touch $BIN/vdrrun
 echo '#!/bin/bash
 # File name: vdrrun
 
-sudo chvt 1  && sleep 2 && /usr/local/bin/vdr -l 3 --no-kbd -u root '$PLUGIN_DESKTOP' -s /usr/local/bin/vdrpoweroff' >> $BIN/vdrrun
+sudo chvt 1  && sleep 2 && /usr/local/bin/vdr -l 3 --no-kbd -u root '$PLUGIN_DESKTOP' -s /usr/local/bin/vdrpoweroff
+
+# -a hw:CARD=sndrpihifiberry,0 
+# -a hw:CARD=BossDAC,0' >> $BIN/vdrrun
 chmod 755 $BIN/vdrrun
 echo "Vdr start installed"
 #
@@ -1266,7 +1259,10 @@ touch $BIN/vdrrun
 echo '#!/bin/bash
 # file name vdrrun
 
-/usr/local/bin/vdr --no-kbd -u root '$PLUGIN_LITE' -s /usr/local/bin/systempoweroff' >> $BIN/vdrrun
+/usr/local/bin/vdr --no-kbd -u root '$PLUGIN_LITE' -s /usr/local/bin/systempoweroff
+
+# -a hw:CARD=sndrpihifiberry,0 
+# -a hw:CARD=BossDAC,0' >> $BIN/vdrrun
 chmod 777 $BIN/vdrrun
 #
 echo "                    Create Vdr Vdrpoweroff"
