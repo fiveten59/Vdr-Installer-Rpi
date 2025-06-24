@@ -22,11 +22,11 @@ download the file
 
 or copy/paste in this folder the script vdr_installer_2.6.X_rpi4 via Usb or SSH (ifconfig gives your IP address) or via Lan using Filezilla
 
-chmod 755 vdr_installer_2.7.5_rpi
+chmod 755 vdr_installer_2.7.6_rpi
 
 now we open the file
 sudo su
-./vdr_installer_2.7.5_rpi
+./vdr_installer_2.7.6_rpi
 
 And follow the script  ...
 Trick: at point 1 type 'First install libraries' just only now
@@ -59,9 +59,9 @@ with
 defaults.ctl.card 1
 defaults.pcm.card 1
 
-Using a solid sound device like hifiberry or similar add to 
+Using a solid sound device like hifiberry or similar add to (for example)
 sudo nano /boot/config.txt
 dtoverlay=hifiberry-dac 
 
 - Libraries are in /usr/local/lib/vdr folder
-- You can put your channells as usual in /etc/vdr
+- You can put your channells as usual in /var/lib/vdr
