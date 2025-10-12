@@ -1,7 +1,7 @@
 # Simple script for installing Vdr on Raspberry Pi4 - Pi5
 
 Os: 
-Bookworm Lite or Desktop 64 bit for Rpi4 - Rpi5
+Bookworm/Trixie Lite or Desktop 64 bit for Rpi4 - Rpi5
 
 At first install Raspberry Pi OS  (script tested with Debian Bookworm)
 
@@ -20,13 +20,13 @@ Now we install the script
 cd new folder
 download the file
 
-or copy/paste in this folder the script vdr_installer_2.6.X_rpi4 via Usb or SSH (ifconfig gives your IP address) or via Lan using Filezilla
+or copy/paste in this folder the script vdr_installer_2.7.X_rpi via Usb or SSH (ifconfig gives your IP address) or via Lan using Filezilla
 
-chmod 755 vdr_installer_2.7.6_rpi
+chmod 755 vdr_installer_2.7.X_rpi
 
 now we open the file
 sudo su
-./vdr_installer_2.7.6_rpi
+./vdr_installer_2.7.X_rpi
 
 And follow the script  ...
 Trick: at point 1 type 'First install libraries' just only now
@@ -34,7 +34,7 @@ Trick: at point 1 type 'First install libraries' just only now
  1 creates a new folder downloading progs & libraries needed by Vdr 
  2 install some DVB firmware FFMPEG e Eventlircd
  3 install Vdr
- 4 install Vdr  Basic plugins Softhddevice-drm-gles - Skinflatplus - Iptv - Radio - Dvbapi - Vnsiserver)
+ 4 install Vdr  Basic plugins Softhddevice-drm-gles - Skinflatplus - Iptv - Radio - Dvbapi - Vnsiserver - TvGuide)
 
  5 configure all the Vdr system (remember when requested type b) Console)
 Select a) installing shared parts 
