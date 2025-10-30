@@ -1,8 +1,8 @@
 #!/bin/bash
 ################################## !!! README !!! #######################################
-# Script name: vdr_installer_2.7.7_rpi
-# Version: Git Repository Master (https://github.com/fiveten59/Vdr_installer-Rpi)
-# Tested on Raspberry Pi 5 - Os: Bookworm/Trixie Desktop & Lite version 64 bit
+# Script name: vdr_installer_2.7.7
+# Version: Git Repository Master (https://github.com/fiveten59/Vdr_installer)
+# Tested on Raspberry Trixie
 # chmod the script
 # then load it simply typing: sudo ./vdr_installer_2.7.7_rpi
 #########################################################################################
@@ -84,7 +84,7 @@ dialog --title " VDR 2.7.7 Installer Raspberry Pi 4-5" --infobox "
 
     Script name: vdr_installer_2.7.7_rpi
     Version: 2.7.7
-    Tested on Raspberry Pi 5 - Os: Bookworm/Trixie Desktop & Lite version 64 bit
+    Tested on Raspberry Pi 4-5 - Os: Bookworm Desktop & Lite version 64 bit
     chmod 755 the script 'vdr_installer_2.7.7_rpi'
     then load it simply typing: sudo ./vdr_installer_2.7.7_rpi" 0 0
 
@@ -186,27 +186,6 @@ else
     git clone https://github.com/Zabrimus/vdr-plugin-iptv.git
 fi
 
-if [ -e $REPO/vdr-plugin-vnsiserver ]; then
-  echo " ..... File exists ..... "
-else
-  echo "File not found ... Downloading it now ....."
-   git clone https://github.com/vdr-projects/vdr-plugin-vnsiserver.git
-  fi
-
-if [ -e $REPO/tvguide ]; then
-  echo " ..... File exists ..... "
-else
-  echo "File not found ... Downloading it now ....."
-    git clone https://gitlab.com/kamel5/tvguide.git
-fi
-
-if [ -e $REPO/vdr-plugin-radio ]; then
-  echo " ..... File exists ..... "
-else
-  echo "File not found ... Downloading it now ....."
-   git clone https://github.com/siricco/vdr-plugin-radio.git
-fi
-
 #
 echo "Downloading skins"
 sleep 1
@@ -216,6 +195,27 @@ if [ -e $REPO/vdr-plugin-skinflatplus ]; then
 else
   echo "File not found ... Downloading it now ....."
     git clone https://github.com/MegaV0lt/vdr-plugin-skinflatplus.git
+  fi
+
+if [ -e $REPO/vdr-plugin-vnsiserver ]; then
+  echo " ..... File exists ..... "
+else
+  echo "File not found ... Downloading it now ....."  
+   git clone https://github.com/vdr-projects/vdr-plugin-vnsiserver.git
+  fi
+
+if [ -e $REPO/tvguide ]; then
+  echo " ..... File exists ..... "
+else
+  echo "File not found ... Downloading it now ....."
+    git clone https://gitlab.com/kamel5/tvguide.git
+fi
+  
+if [ -e $REPO/vdr-plugin-radio ]; then
+  echo " ..... File exists ..... "
+else
+  echo "File not found ... Downloading it now ....."  
+   git clone https://github.com/siricco/vdr-plugin-radio.git
   fi
   
 echo "Downloading others"
@@ -232,8 +232,10 @@ if [ -e $REPO/rpi_import_1.zip ]; then
   echo " ..... File exists ....."
 else
   echo "File not found ... Downloading it now ....."
-    wget https://github.com/jc-kynesim/rpi-ffmpeg/archive/refs/heads/dev/7.1.1/rpi_import_1.zip
+    # wget https://github.com/jc-kynesim/rpi-ffmpeg/archive/refs/heads/dev/7.1.1/rpi_import_1.zip
+    wget https://github.com/jc-kynesim/rpi-ffmpeg/archive/refs/heads/test/7.1.2/main.zip
 fi
+
 
 if [ -e $REPO/yt-dlp ]; then
   echo " ..... File exists ....."
@@ -278,7 +280,7 @@ git clone https://github.com/MegaV0lt/vdr-plugin-skinflatplus.git
 echo "                    Downloading others"
 
 git clone https://github.com/Libreelec/eventlircd.git
-wget https://github.com/jc-kynesim/rpi-ffmpeg/archive/refs/heads/dev/7.1.1/rpi_import_1.zip
+wget https://github.com/jc-kynesim/rpi-ffmpeg/archive/refs/heads/test/7.1.2/main.zip
 wget https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp
 wget https://github.com/fiveten59/Logos/archive/refs/heads/master.zip
 unzip master.zip; rm -rf master.zip; mv -f Logos-master logos
@@ -296,8 +298,8 @@ clear
 dialog --title " Common Libs (Ffmpeg) & Infra-Red Remotes Control (Eventlircd)" --infobox "
 ----------------------------------------------------------------------------------------
         *****  Install  *****  .....................
-        [a]    Configuring Boot Raspberry Pi 4/5 - Bookworm/Trixie Desktop Version
-        [b]    Configuring Boot Raspberry Pi 4/5 - Bookworm/Trixie Lite Version
+        [a]    Configuring Boot Raspberry Pi 4/5 - Bookworm Desktop Version
+        [b]    Configuring Boot Raspberry Pi 4/5 - Bookworm Lite Version
         [c]    FFmpeg
         [d]    Eventlircd
         [e]    Installing Sat firmware
@@ -316,11 +318,15 @@ case $yourch in
 #
 a)
 clear
-echo "                    Configuring Raspberry Pi 4/5 - Config Boot Bookworm/Trixie Desktop Version"
-sleep 2
+echo "                    Configuring Raspberry Pi 4/5 - Config Boot Bookworm Desktop Version"
+sleep 1
+#echo "deb http://www.deb-multimedia.org trixie main" >> /etc/apt/sources.list
+#apt update -oAcquire::AllowInsecureRepositories=true
+#apt install -y deb-multimedia-keyring
+#apt update
+#
 echo "dtoverlay=disable-bt" >> /boot/firmware/config.txt
-#echo "dtoverlay=hifiberry-dac" >> /boot/firmware/config.txt
-echo "dtoverlay=allo-boss-dac-pcm512x-audio" >> /boot/firmware/config.txt
+echo "dtoverlay=hifiberry-dac" >> /boot/firmware/config.txt
 sed -i 's|dtparam=audio=on|# dtparam=audio=on|' /boot/firmware/config.txt
 sed -i 's|camera_auto_detect=1|# camera_auto_detect=1|' /boot/firmware/config.txt
 sed -i 's|dtoverlay=vc4-kms-v3d|dtoverlay=vc4-kms-v3d,cma-256|' /boot/firmware/config.txt
@@ -336,11 +342,10 @@ vheight = 2
 #
 b)
 clear
-echo "                    Configuring Raspberry Pi 4/5 - Config Boot BookwormTrixie Lite Version"
+echo "                    Configuring Raspberry Pi 4/5 - Config Boot Bookworm Lite Version"
 sleep 1
 echo "dtoverlay=disable-bt" >> /boot/firmware/config.txt
 echo "dtoverlay=allo-boss-dac-pcm512x-audio" >> /boot/firmware/config.txt
-echo "dtoverlay=hifiberry-dac" >> /boot/firmware/config.txt
 sed -i 's|dtoverlay=vc4-kms-v3d|dtoverlay=vc4-kms-v3d,cma-512|' /boot/firmware/config.txt
 sed -i 's|dtparam=audio=on|# dtparam=audio=on|' /boot/firmware/config.txt
 sed -i 's|camera_auto_detect=1|#camera_auto_detect=1|' /boot/firmware/config.txt
@@ -373,10 +378,10 @@ then echo "Rpi-FFmpeg is already installed"; sleep 3
 else
     echo "                    Wait for a few seconds ..."
 cd $SRC/ffmpeg_sources
-cp -rf $REPO/rpi_import_1.zip $SRC/ffmpeg_sources
-unzip rpi_import_1.zip
-mv rpi-ffmpeg-dev-7.1.1-rpi_import_1 rpi-ffmpeg
-rm -rf rpi_import_1.zip
+cp -rf $REPO/main.zip $SRC/ffmpeg_sources
+unzip main.zip
+mv rpi-ffmpeg-test-7.1.2-main rpi-ffmpeg
+rm -rf main.zip
 cd rpi-ffmpeg
 ./configure --extra-libs="-ldl" --arch=arm64  --enable-sand --enable-v4l2_m2m --enable-v4l2-request --enable-vout-drm --enable-libudev --enable-libdrm --enable-libx265 --enable-libx264 --enable-gpl --enable-pic --enable-avfilter --enable-nonfree --enable-gpl --enable-iconv --enable-network --enable-pthreads --disable-vdpau --disable-vaapi --enable-version3 --enable-shared --enable-libfreetype --enable-avcodec --enable-libmp3lame --enable-libopus --enable-libtheora --enable-libvorbis --enable-swresample --enable-libpulse --enable-libass --enable-libbluray --enable-libaom --enable-libfdk-aac --enable-libcodec2 --enable-libtwolame --enable-libmysofa --enable-libopenh264 --enable-libopenmpt --enable-librsvg --enable-libsnappy --enable-libsoxr --enable-libspeex --enable-libvpx --enable-opengl  --enable-libshine --enable-zlib --disable-vulkan --enable-libfontconfig --enable-libbs2b --enable-libcaca --enable-libfribidi --enable-libgme --enable-libgsm --enable-libssh --enable-libwebp --enable-libzvbi --enable-openal --enable-libjack --enable-libopenjpeg --enable-libxml2 --enable-lv2 --enable-xlib  --enable-openssl --enable-libxcb --enable-libxvid  --disable-doc --disable-cuda-sdk
 echo "                    Press Enter to continue ..."
@@ -657,10 +662,10 @@ mkdir -p $VDRCONF/themes
 echo "
                     Installing Vdr-Plugin-Softhddevice-drm-gles"
 sleep 1
-apt -y install libgles-dev libegl-dev
-apt -y install libegl-mesa0 libegl1-mesa-dev
-apt -y install libgbm1 libgbm-dev libglm-dev
-apt -y install libasound2-dev libpng-dev
+apt -y install libxcb-ewmh-dev libasound2-dev libpng-dev
+apt -y install libgles-dev libgles2-mesa-dev
+apt -y install libegl-dev libegl1-mesa-dev 
+apt -y install libgbm-dev libglm-dev libfreetype-dev
 #
 cd $VDRSRC
 cp -rf $REPO/vdr-plugin-softhddevice-drm-gles /$VDRSRC
@@ -671,19 +676,21 @@ echo "
 
                     Vdr-Plugin-Softhddevice-drm-gles installed"; sleep 1
 #
-echo "
+echo "                    
                     Installing Skinflatplus"
 sleep 2
 apt -y install libfreetype6-dev graphicsmagick-libmagick-dev-compat lm-sensors
 cd $VDRSRC
 cp -rf $REPO/vdr-plugin-skinflatplus $VDRSRC
-mv -f vdr-plugin-skinflatplus skinflatplus
+mv vdr-plugin-skinflatplus skinflatplus
 cd skinflatplus
-make & make install
-#cd $LIBCONF/skinflatplus/widgets/temperatures/
-#ln -s temperatures.default temperatures
-#cd $LIBCONF/skinflatplus/widgets/system_information
-#ln -s system_information.ubuntu system_information
+make
+cd ../../..
+make install
+cd $LIBCONF/skinflatplus/widgets/temperatures/
+ln -s temperatures.default temperatures
+cd $LIBCONF/skinflatplus/widgets/system_information
+ln -s system_information.ubuntu system_information
 echo "
 
                     Skinflatplus installed"; sleep 1
@@ -696,7 +703,7 @@ cd $VDRSRC
 cp -rf $REPO/vdr-plugin-iptv /$VDRSRC
 mv -f vdr-plugin-iptv iptv
 cd iptv
-cp -rf $REPO/patch_iptv.tar.gz $VDRSRC/iptv
+cp -rf $REPO/patch_iptv.tar.gz /$VDRSRC/iptv
 tar -zxvf patch_iptv.tar.gz
 rm -rf patch_iptv.tar.gz
 patch -p1 < vlc2iptv.patch
@@ -708,10 +715,10 @@ echo "
                     Installing Vdr-Plugin-Vnsiserver"
 sleep 1
 cd $VDRSRC
-cp -rf $REPO/vdr-plugin-vnsiserver $VDRSRC
+cp -rf $REPO/vdr-plugin-vnsiserver /$VDRSRC
 mv -f vdr-plugin-vnsiserver vnsiserver
 cd vnsiserver
-make && make install LIBDIR=/usr/local/lib/vdr
+make && make install
 echo "
                     Vdr-Plugin-Vnsiserver installed"; sleep 1
 #
@@ -730,7 +737,7 @@ echo "
                     Installing Vdr-Plugin-Radio"
 sleep 1
 cd $VDRSRC
-cp -rf $REPO/vdr-plugin-radio $VDRSRC
+cp -rf $REPO/vdr-plugin-radio /$VDRSRC
 mv -f vdr-plugin-radio radio
 cd radio
 cp -rf $REPO/patch_radio.tar.gz $VDRSRC/radio
@@ -754,7 +761,7 @@ make LIBDVBCSA=1 install
 echo "
                     Vdr-Plugin-Dvbapi installed"; sleep 1
 #
-echo "
+echo "                    
                     VDR-2.7.7 plugins installed"; sleep 1
 echo "
 ============================================================================================================
@@ -772,7 +779,6 @@ rm -rf iptv
 rm -rf radio
 rm -rf vnsiserver
 rm -rf dvbapi
-rm -rf tvguide
 cd $LIBCONF
 rm -rf libvdr-skinflatplus.*
 rm -rf libvdr-softhddevice-drm-gles.*
@@ -781,15 +787,21 @@ rm -rf libvdr-iptv.*
 rm -rf libvdr-radio.*
 rm -rf libvdr-vnsiserver.*
 rm -rf libvdr-dvbapi.*
-rm -rf libvdr-tvguide.*
 cd $VDRCONF/plugins
 rm -rf skinflatplus
 rm -rf iptv
 rm -rf radio
-rm -rf allowed_hosts
 cd $SHARE
 rm -rf skinflatplus
-#
+cd $FONTS
+rm -rf skinflatplus
+rm -rf iptv
+rm -rf dvbapi
+rm -rf radio
+rm -rf softhddevice
+rm -rf vnsiserver
+rm -rf temperatures
+rm -rf system_information
 echo "VDR-2.x.* plugins removed"; sleep 1;;
 z);;
 #
@@ -890,7 +902,7 @@ dialog --title "   ** Channells list **   " --infobox "
 echo -n "        Enter your menu choice = Install [a-e] ~~ Skip [z]    "
 read yourch
 case $yourch in
-a)
+a) 
 clear
 cp -rf $REPO/channels.conf.mono_hotbird.tar.gz $VDRCONF
 tar -zxvf channels.conf.mono_hotbird.tar.gz
@@ -1206,17 +1218,17 @@ clear
 echo "                    Automatic start Vdr"
 sleep 1
 cd /home/`logname`/.config/autostart
-rm -rf vdr-autostart.desktop
-touch vdr-autostart.desktop
+rm -rf Vdr_autostart.desktop
+touch Vdr_autostart.desktop
 echo '[Desktop Entry]
 Type=Application
 Name[it]=Vdr
 Exec=/etc/init.d/vdr start > /dev/null 2>&1 
 NoDisplay=false
-Name[it_IT]=vdr-autostart.desktop' >> /home/`logname`/.config/autostart/vdr-autostart.desktop
+Name[it_IT]=Vdr_autostart.desktop' >> /home/`logname`/.config/autostart/Vdr_autostart.desktop
 echo "Automatic start Vdr installed"
-chmod 755 /home/`logname`/.config/autostart/vdr-autostart.desktop
-sleep 1;;
+sleep 1
+chmod 777 /home/`logname`/.config/autostart/*;;
 b) clear;;
 esac
 #
