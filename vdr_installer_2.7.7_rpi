@@ -149,8 +149,8 @@ cd /home/`logname`/
 if [ -d /home/`logname`/Vdr_repo ]; then
   echo " ..... Folder exists ..... "
 else
-   wget https://github.com/fiveten59/Vdr_repo/archive/refs/heads/main.zip
-   unzip main.zip; rm -rf main.zip; mv -f Vdr_repo-main Vdr_repo
+   wget https://github.com/fiveten59/Vdr_repo/archive/refs/heads/master.zip
+   unzip master.zip; rm -rf master.zip; mv -f Vdr_repo-master Vdr_repo
 fi
 
 cd Vdr_repo
@@ -258,8 +258,8 @@ b)
 clear
 cd /home/`logname`/
 rm -rf Vdr_repo
-wget https://github.com/fiveten59/Vdr_repo/archive/refs/heads/main.zip
-unzip main.zip; rm -rf main.zip; mv -f Vdr_repo-main Vdr_repo
+wget https://github.com/fiveten59/Vdr_repo/archive/refs/heads/master.zip
+unzip master.zip; rm -rf master.zip; mv -f Vdr_repo-master Vdr_repo
 
 cd Vdr_repo
 
@@ -327,18 +327,10 @@ sleep 1
 #
 echo "dtoverlay=disable-bt" >> /boot/firmware/config.txt
 echo "dtoverlay=hifiberry-dac" >> /boot/firmware/config.txt
+echo "dtoverlay=allo-boss-dac-pcm512x-audio" >> /boot/firmware/config.txt
 sed -i 's|dtparam=audio=on|# dtparam=audio=on|' /boot/firmware/config.txt
 sed -i 's|camera_auto_detect=1|# camera_auto_detect=1|' /boot/firmware/config.txt
-sed -i 's|dtoverlay=vc4-kms-v3d|dtoverlay=vc4-kms-v3d,cma-256|' /boot/firmware/config.txt
-
-echo "
-[expo]
-toggle = <ctrl> KEY_SPACE
-
-[core]
-vwidth = 2
-vheight = 2
-" >> /home/`logname`/.config/wayfire.ini;;
+sed -i 's|dtoverlay=vc4-kms-v3d|dtoverlay=vc4-kms-v3d,cma-512|' /boot/firmware/config.txt;;
 #
 b)
 clear
